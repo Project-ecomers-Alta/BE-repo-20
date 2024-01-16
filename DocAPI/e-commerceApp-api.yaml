@@ -1,0 +1,772 @@
+openapi: 3.0.0
+info:
+  description: |
+    Open api e-commerce app.
+
+  version: "1.0.0"
+  title: E-commerceApp
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/DWIMIRANDAA/E-CommerceApp/1.0.0
+  - url: "https://petstore.swagger.io/v2"
+
+paths:
+  /login:
+    post:
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: altacademy@gmail.com
+                password:
+                  type: string
+                  example: qwertyuiop
+      responses:
+        "200":
+          $ref: "#/components/responses/ResponseLogin200"
+        "400":
+          $ref: "#/components/responses/ResponseLogin400"
+      security: []
+  /register:
+    post:
+      tags:
+        - "Authentication"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nama_lengkap:
+                  type: string
+                  example: hanapi bagas pamungkas
+                email:
+                  type: string
+                  example: sample@gmail.com
+                password:
+                  type: string
+                  example: qwerty
+      responses:
+        "200":
+          $ref: "#/components/responses/ResponseRegister200"
+        "400":
+          $ref: "#/components/responses/ResponseRegister400"
+      security: []
+
+  /users:
+    get:
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: get user by id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimpleUserSchema"
+        "400":
+          $ref: "#/components/responses/ResponseRegister400"
+
+    put:
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsersSchema"
+      responses:
+        "200":
+          $ref: "#/components/responses/Response200"
+        "400":
+          $ref: "#/components/responses/Response400"
+    delete:
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          $ref: "#/components/responses/Response200"
+        "400":
+          $ref: "#/components/responses/Response400"
+
+  /products:
+    post:
+      tags:
+        - Products
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ProductSchema"
+      responses:
+        "200":
+          $ref: "#/components/responses/ResponseCreateProduct200"
+        "400":
+          $ref: "#/components/responses/Response400"
+    get:
+      tags:
+        - Products
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: get all products
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductsResponse"
+
+        "400":
+          $ref: "#/components/responses/Response400"
+
+  /users/{users_id}/products:
+    get:
+      tags:
+        - Products
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: get all products
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductsResponseByUser"
+
+        "400":
+          $ref: "#/components/responses/Response400"
+
+  /product/{product_id}:
+    put:
+      tags:
+        - Products
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ProductSchema"
+      responses:
+        "200":
+          $ref: "#/components/responses/ResponseCreateProduct200"
+        "400":
+          $ref: "#/components/responses/Response400"
+
+    delete:
+      tags:
+        - Products
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ProductSchema"
+      responses:
+        "200":
+          $ref: "#/components/responses/ResponseCreateProduct200"
+        "400":
+          $ref: "#/components/responses/Response400"
+  # /products/{id}:
+  #   get:
+  #     tags:
+  #       - Products
+  #     parameters:
+  #       - in: path
+  #         name: id
+  #         schema:
+  #           type: number
+  #           example: 1
+  #         required: true
+  #     responses:
+  #       "200":
+  #         description: get product
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/ProductSchema"
+  #       "400":
+  #         $ref: "#/components/responses/Response400"
+  #   put:
+  #     tags:
+  #       - Products
+  #     parameters:
+  #       - in: path
+  #         name: id
+  #         schema:
+  #           type: number
+  #           example: 1
+  #         required: true
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: "#/components/schemas/ProductSchema"
+  #     responses:
+  #       "200":
+  #         $ref: "#/components/responses/Response200"
+  #       "400":
+  #         $ref: "#/components/responses/Response400"
+  #   delete:
+  #     tags:
+  #       - Products
+  #     parameters:
+  #       - in: path
+  #         name: id
+  #         schema:
+  #           type: number
+  #           example: 1
+  #         required: true
+  #     responses:
+  #       "200":
+  #         $ref: "#/components/responses/Response200"
+  #       "400":
+  #         $ref: "#/components/responses/Response400"
+  # /cart:
+  #   post:
+  #     tags:
+  #       - Cart
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: "#/components/schemas/CartSchema"
+  #     responses:
+  #       "200":
+  #         $ref: "#/components/responses/Response200"
+  #       "400":
+  #         $ref: "#/components/responses/Response400"
+  #   get:
+  #     tags:
+  #       - Cart
+  #     responses:
+  #       "200":
+  #         description: get all cart
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/ArrayOfCartSchema"
+  #       "400":
+  #         $ref: "#/components/responses/Response400"
+  # /cart/{id}:
+  #   put:
+  #     tags:
+  #       - Cart
+  #     parameters:
+  #       - in: path
+  #         name: id
+  #         schema:
+  #           type: number
+  #           example: 1
+  #         required: true
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               qty:
+  #                 type: integer
+  #                 example: 20
+  #     responses:
+  #       "200":
+  #         $ref: "#/components/responses/Response200"
+  #       "400":
+  #         $ref: "#/components/responses/Response400"
+  #   delete:
+  #     tags:
+  #       - Cart
+  #     parameters:
+  #       - in: path
+  #         name: id
+  #         schema:
+  #           type: number
+  #           example: 1
+  #         required: true
+  #     responses:
+  #       "200":
+  #         $ref: "#/components/responses/Response200"
+  #       "400":
+  #         $ref: "#/components/responses/Response400"
+  # /order:
+  # post:
+  #   tags:
+  #     - Order
+  #   requestBody:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           $ref: "#/components/schemas/OrderSchema"
+  #   responses:
+  #     "200":
+  #       $ref: "#/components/responses/Response200"
+  #     "400":
+  #       $ref: "#/components/responses/Response400"
+  # get:
+  #   tags:
+  #     - Order
+  #   responses:
+  #     "200":
+  #       description: get all cart
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: "#/components/schemas/ArrayOfCartSchema"
+  #     "400":
+  #       $ref: "#/components/responses/Response400"
+
+components:
+  responses:
+    ResponseLogin200:
+      description: success create
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  token:
+                    type: string
+            example:
+              message: success
+              data:
+                email: altacademy@gmail.com
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    ResponseRegister200:
+      description: success create
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  nama_lengkap:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+            example:
+              message: success
+              data:
+                nama_lengkap: hanapi bagas pamungkas
+                email: sample@gmail.com
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    Response200:
+      description: success create
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  nama_lengkap:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+            example:
+              message: success
+              data:
+                nama_lengkap: hanapi bagas pamungkas
+                email: sample@gmail.com
+                token: eyJhbGciOiJIUzI1NiIsInR2QT4fwpMeJf36POk6yJV_adQssw5
+    ResponseRegister400:
+      description: bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: Bad Request
+    ResponseLogin400:
+      description: bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: Bad Request
+    Response400:
+      description: bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: Bad Request
+    ResponseCreateProduct200:
+      description: success create
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  users_id:
+                    type: integer
+                  product_name:
+                    type: string
+                  price:
+                    type: integer
+                  photo_url:
+                    type: string
+            example:
+              message: success
+              data:
+                users_id: 4
+                product_name: Lenovo 552
+                price: 7.800.000
+                photo_url: https://s3.amazonaws.com/bucket-name/path-to-image/image.jpg
+
+  schemas:
+    UsersSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Alterra Academy
+        email:
+          type: string
+          example: Altacademy@gmail.com
+        password:
+          type: string
+          example: qwertyuiop
+
+    SimpleUserSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Alterra Academy
+        email:
+          type: string
+          example: Altacademy@gmail.com
+
+    ProductsResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        data:
+          type: array
+          minItems: 3
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/ProductInfo"
+              - $ref: "#/components/schemas/ProductInfo1"
+              - $ref: "#/components/schemas/ProductInfo2"
+    ProductInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        product_name:
+          type: string
+          example: "Produk A"
+        price:
+          type: number
+          example: 50000
+        photo_url:
+          type: string
+          example: https://s3.amazonaws.com/bucket-name/path-to-image/image.jpg
+        users_id:
+          type: integer
+          example: 2
+        user_info:
+          $ref: "#/components/schemas/UserInfo"
+    ProductInfo1:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 2
+        product_name:
+          type: string
+          example: "Produk B"
+        price:
+          type: number
+          example: 20000
+        photo_url:
+          type: string
+          example: https://s3.amazonaws.com/bucket-name/path-to-image/image.jpg
+        users_id:
+          type: integer
+          example: 2
+        user_info:
+          $ref: "#/components/schemas/UserInfo"
+    ProductInfo2:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        product_name:
+          type: string
+          example: "Produk C"
+        price:
+          type: number
+          example: 12000
+        photo_url:
+          type: string
+          example: https://s3.amazonaws.com/bucket-name/path-to-image/image.jpg
+        users_id:
+          type: integer
+          example: 4
+        user_info:
+          $ref: "#/components/schemas/UserInfo1"
+    UserInfo:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 2
+        username:
+          type: string
+          example: "hanapi bagas"
+        email:
+          type: string
+          example: "sampel@gmail.com"
+    UserInfo1:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 4
+        username:
+          type: string
+          example: "yoga"
+        email:
+          type: string
+          example: "sampelyoga@gmail.com"
+
+    ProductsResponseByUser:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        data:
+          type: array
+          minItems: 2
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/ProductInfoByUser"
+              - $ref: "#/components/schemas/ProductInfo1ByUser"
+    ProductInfoByUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        product_name:
+          type: string
+          example: "Produk A"
+        price:
+          type: number
+          example: 50000
+        photo_url:
+          type: string
+          example: https://s3.amazonaws.com/bucket-name/path-to-image/image.jpg
+        users_id:
+          type: integer
+          example: 2
+        user_info:
+          $ref: "#/components/schemas/UserInfoByUser"
+    ProductInfo1ByUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 2
+        product_name:
+          type: string
+          example: "Produk B"
+        price:
+          type: number
+          example: 20000
+        photo_url:
+          type: string
+          example: https://s3.amazonaws.com/bucket-name/path-to-image/image.jpg
+        users_id:
+          type: integer
+          example: 2
+        user_info:
+          $ref: "#/components/schemas/UserInfoByUser"
+    UserInfoByUser:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 2
+        username:
+          type: string
+          example: "hanapi bagas"
+        email:
+          type: string
+          example: "sampel@gmail.com"
+
+    ProductSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 5
+        product_name:
+          type: string
+          example: iPhone 14
+        photo_url:
+          type: string
+          format: binary
+        price:
+          type: integer
+          example: 20000000
+        qty:
+          type: integer
+          example: 20
+        description:
+          type: string
+
+    CartSchema:
+      type: object
+      required:
+        - product_id
+        - qty
+      properties:
+        product_id:
+          type: integer
+          example: 15
+        qty:
+          type: number
+          example: 2
+    # ArrayOfCartSchema:
+    #   type: array
+    #   items:
+    #     allOf:
+    #       - type: object
+    #         properties:
+    #           id:
+    #             type: integer
+    #             example: 12
+    #           qty:
+    #             type: integer
+    #             example: 2
+    #           total_price:
+    #             type: integer
+    #             example: 50000
+    #           user_id:
+    #             type: integer
+    #             example: 98
+    #       - type: object
+    #         properties:
+    #           product:
+    #             $ref: "#/components/schemas/ProductSchema"
+
+    OrderSchema:
+      type: object
+      properties:
+        cart_id:
+          type: array
+          items:
+            type: integer
+            example: 23
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+              example: "Jalan Lembah Griya"
+            city:
+              type: string
+              example: "Bogor"
+            state:
+              type: string
+              example: "Indonesia"
+            zip:
+              type: number
+              example: 10101
+        credit_card:
+          type: object
+          properties:
+            type:
+              type: string
+              example: "Visa"
+            name:
+              type: string
+              example: "Alterra"
+            number:
+              type: string
+              example: "1000-1000-1000-1000"
+            cvv:
+              type: number
+              example: 101
+            month:
+              type: number
+              example: 1
+            year:
+              type: number
+              example: 2029
+
+  securitySchemes:
+    BearerAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+
+security:
+  - BearerAuth: []
