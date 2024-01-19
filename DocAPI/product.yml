@@ -20,6 +20,61 @@ paths:
           $ref: "#/components/responses/ResponseCreateProduct200"
         "400":
           $ref: "#/components/responses/Response400"
+    get:
+      tags:
+        - Products
+      description: untuk melakukan pencarian data berdasarkan nama produk
+      parameters:
+        - name: page
+          in: query
+          description: page
+          schema:
+            type: string
+            example: 1
+        - name: search
+          in: query
+          description: nama product yang mau di cari
+          schema:
+            type: string
+            example: sepatu sneakers wanita
+        - name: category
+          in: query
+          description: untuk mencari category
+          schema:
+            type: string
+            example: women_shoes
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                message: "success"
+                data:
+                  - id: 43
+                    product_name: SEPATU SNEAKERS WANITA AIR JORDAN 3 TINKER - White, 40
+                    category: women shoes
+                    price: 800000
+                    user_id: 3
+                    details_images:
+                      - product_id: 43
+                        images: "/path/to/image1.jpg"
+                      - product_id: 43
+                        images: "/path/to/image2.jpg"
+                      - product_id: 43
+                        images: "/path/to/image3.jpg"
+                    user_info:
+                      user_id: 3
+                      nama_user: Hanapi Bagas Pamungkas
+                      tag_line: Murah meria
+                      email: sample@gmail.com
+                      province: jakarta
+                      city: bekasi
+                      domicile: jakarta pusat
+                      address: jln patimurah nomor 3
+                      phone_number: 8123456789
+        "400":
+          $ref: "#/components/responses/Response400"
 
   /product/{product_id}/image:
     post:
@@ -115,8 +170,6 @@ paths:
           $ref: "#/components/responses/ResponseCreateProduct200"
         "400":
           $ref: "#/components/responses/Response400"
-
-  /details_product/{product_id}:
     get:
       tags:
         - Products
@@ -152,220 +205,6 @@ paths:
                       domicile: jakarta pusat
                       address: jln patimurah nomor 3
                       phone_number: 8123456789
-        "400":
-          $ref: "#/components/responses/Response400"
-
-  /product/men_shoes:
-    get:
-      tags:
-        - Products
-      description: untuk menampilkan semua data yang berkategori sepatu pria
-      parameters:
-        - name: Men shoes
-          in: query
-          required: false
-          description: filter bersarkan kategori men shoes
-          schema:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              example:
-                message: "success"
-                data:
-                  - id: 43
-                    product_name: SEPATU SNEAKERS PRIA AIR JORDAN 3 TINKER - White, 40
-                    category: men shoes
-                    price: 200000
-                    user_id: 3
-                    details_images:
-                      - product_id: 43
-                        images: "/path/to/image1.jpg"
-                      - product_id: 43
-                        images: "/path/to/image2.jpg"
-                      - product_id: 43
-                        images: "/path/to/image3.jpg"
-                    user_info:
-                      user_id: 3
-                      nama_user: Hanapi Bagas Pamungkas
-                      tag_line: Murah meria
-                      email: sample@gmail.com
-                      province: jakarta
-                      city: bekasi
-                      domicile: jakarta pusat
-                      address: jln patimurah nomor 3
-                      phone_number: 8123456789
-                  - id: 36
-                    product_name: SEPATU SNEAKERS PRIA AIR JORDAN 3 TINKER - White, 40
-                    category: men shoes
-                    price: 300000
-                    user_id: 5
-                    details_images:
-                      - product_id: 36
-                        images: "/path/to/image1.jpg"
-                      - product_id: 36
-                        images: "/path/to/image2.jpg"
-                      - product_id: 36
-                        images: "/path/to/image3.jpg"
-                    user_info:
-                      user_id: 5
-                      nama_user: yoga
-                      tag_line: Murah meria
-                      email: sample@gmail.com
-                      province: jakarta
-                      city: bekasi
-                      domicile: jakarta pusat
-                      address: jln patimurah nomor 3
-                      phone_number: 8123456789
-        "400":
-          $ref: "#/components/responses/Response400"
-
-  /product/women_shoes:
-    get:
-      tags:
-        - Products
-      description: untuk menampilkan semua data yang berkategori septu wanita
-      parameters:
-        - name: women shoes
-          in: query
-          required: false
-          description: filter bersarkan kategori women shoes
-          schema:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              example:
-                message: "success"
-                data:
-                  - id: 43
-                    product_name: SEPATU SNEAKERS WANITA AIR JORDAN 3 TINKER - White, 40
-                    category: women shoes
-                    price: 800000
-                    user_id: 3
-                    details_images:
-                      - product_id: 43
-                        images: "/path/to/image1.jpg"
-                      - product_id: 43
-                        images: "/path/to/image2.jpg"
-                      - product_id: 43
-                        images: "/path/to/image3.jpg"
-                    user_info:
-                      user_id: 3
-                      nama_user: Hanapi Bagas Pamungkas
-                      tag_line: Murah meria
-                      email: sample@gmail.com
-                      province: jakarta
-                      city: bekasi
-                      domicile: jakarta pusat
-                      address: jln patimurah nomor 3
-                      phone_number: 8123456789
-                  - id: 36
-                    product_name: SEPATU SNEAKERS WOMEN AIR JORDAN 3 TINKER - White, 40
-                    category: women shoes
-                    price: 250000
-                    user_id: 5
-                    details_images:
-                      - product_id: 36
-                        images: "/path/to/image1.jpg"
-                      - product_id: 36
-                        images: "/path/to/image2.jpg"
-                      - product_id: 36
-                        images: "/path/to/image3.jpg"
-                    user_info:
-                      user_id: 5
-                      nama_user: yoga
-                      tag_line: Murah meria
-                      email: sample@gmail.com
-                      province: jakarta
-                      city: bekasi
-                      domicile: jakarta pusat
-                      address: jln patimurah nomor 3
-                      phone_number: 8123456789
-        "400":
-          $ref: "#/components/responses/Response400"
-
-  /product?page=1:
-    get:
-      tags:
-        - Products
-      description: akan menampilkan seluruh data product perpage datanya ada 10
-      security:
-        - BearerAuth: []
-      responses:
-        "200":
-          description: get all products
-          content:
-            application/json:
-              example:
-                message: "success"
-                data:
-                  - id: 2
-                    product_name: SEPATU SNEAKERS WOMEN AIR JORDAN 3 TINKER - White, 40
-                    category: women shoes
-                    price: 800000
-                    user_id: 5
-                    details_images:
-                      - product_id: 2
-                        images: "/path/to/image1.jpg"
-                      - product_id: 2
-                        images: "/path/to/image2.jpg"
-                      - product_id: 2
-                        images: "/path/to/image3.jpg"
-                    user_info:
-                      user_id: 5
-                      nama_user: yoga
-                      tag_line: Murah meria
-                      email: sample@gmail.com
-                      province: jakarta
-                      city: bekasi
-                      domicile: jakarta pusat
-                      address: jln patimurah nomor 3
-                      phone_number: 8123456789
-                  - id: 4
-                    product_name: SEPATU SNEAKERS PRIA AIR JORDAN 3 TINKER - White, 40
-                    category: women shoes
-                    price: 800000
-                    user_id: 7
-                    details_images:
-                      - product_id: 4
-                        images: "/path/to/image1.jpg"
-                      - product_id: 4
-                        images: "/path/to/image2.jpg"
-                      - product_id: 4
-                        images: "/path/to/image3.jpg"
-                    user_info:
-                      user_id: 7
-                      nama_user: yoga
-                      tag_line: Murah meria
-                      email: sample@gmail.com
-                      province: jakarta
-                      city: bekasi
-                      domicile: jakarta pusat
-                      address: jln patimurah nomor 3
-                      phone_number: 8123456789
-        "400":
-          $ref: "#/components/responses/Response400"
-
-  /product/search:
-    get:
-      tags:
-        - Products
-      description: untuk melakukan pencarian data berdasarkan nama produk
-      parameters:
-        - name: nama_product
-          in: query
-          description: nama product yang mau di cari
-          required: true
-          schema:
-            $ref: "#/components/schemas/PencarianProductSchma"
-      responses:
-        "200":
-          $ref: "#/components/responses/ResponseSearchProduct200"
         "400":
           $ref: "#/components/responses/Response400"
 
