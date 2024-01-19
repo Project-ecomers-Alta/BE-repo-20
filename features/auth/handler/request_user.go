@@ -5,7 +5,7 @@ import "BE-REPO-20/features/auth"
 type RegisterRequest struct {
 	UserName string `json:"user_name"`
 	Email    string `json:"email"`
-	Domicile string `json:"dimicile"`
+	Domicile string `json:"domicile"`
 	Password string `json:"password"`
 	Role     string `json:"role"`
 }
