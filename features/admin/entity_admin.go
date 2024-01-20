@@ -17,9 +17,11 @@ type AdminUserCore struct {
 type AdminDataInterface interface {
 	GetUserRoleById(userId int) (string, error)
 	SelectAllUser() ([]AdminUserCore, error)
+	SearchUserByQuery(query string) ([]AdminUserCore, error)
 }
 
 type AdminServiceInterface interface {
 	GetUserRoleById(userId int) (string, error)
 	SelectAllUser() ([]AdminUserCore, error)
+	SearchUserByQuery(query string) ([]AdminUserCore, error)
 }

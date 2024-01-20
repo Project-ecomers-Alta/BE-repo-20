@@ -52,3 +52,33 @@ func (repo *adminQuery) SelectAllUser() ([]admin.AdminUserCore, error) {
 
 	return adminsDataCore, nil
 }
+
+// SearchUserByQuery implements admin.AdminDataInterface.
+func (repo *adminQuery) SearchUserByQuery(query string) ([]admin.AdminUserCore, error) {
+	var adminDataGorm []admin.AdminUserCore
+	tx := repo.db.Table("users").Where("full_name LIKE ?", "%"+query+"%").
+		Or("user_name LIKE ?", "%"+query+"%").
+		Or("email LIKE ?", "%"+query+"%").
+		Find(&adminDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	// Proses mapping dari struct gorm model ke struct core
+	var adminsDataCore []admin.AdminUserCore
+	for _, value := range adminDataGorm {
+		var adminCore = admin.AdminUserCore{
+			ID:        value.ID,
+			FullName:  value.FullName,
+			UserName:  value.UserName,
+			Email:     value.Email,
+			Domicile:  value.Domicile,
+			Role:      value.Role,
+			CreatedAt: value.CreatedAt,
+			UpdatedAt: value.UpdatedAt,
+		}
+		adminsDataCore = append(adminsDataCore, adminCore)
+	}
+
+	return adminsDataCore, nil
+}

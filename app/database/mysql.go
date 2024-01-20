@@ -2,6 +2,7 @@ package database
 
 import (
 	"BE-REPO-20/app/configs"
+
 	"BE-REPO-20/features/auth/data"
 	"fmt"
 
