@@ -9,7 +9,10 @@ import (
 )
 
 var (
-	JWT_SECRET string
+	JWT_SECRET            string
+	CLOUDINARY_KEY        string
+	CLOUDINARY_SECRET     string
+	CLOUDINARY_CLOUD_NAME string
 )
 
 type AppConfig struct {
@@ -73,6 +76,9 @@ func ReadEnv() *AppConfig {
 		app.DB_PORT, _ = strconv.Atoi(viper.Get("DBPORT").(string))
 		app.DB_NAME = viper.Get("DBNAME").(string)
 		JWT_SECRET = viper.Get("JWTSECRET").(string)
+		CLOUDINARY_KEY = viper.Get("CLOUDINARY_KEY").(string)
+		CLOUDINARY_SECRET = viper.Get("CLOUDINARY_SECRET").(string)
+		CLOUDINARY_CLOUD_NAME = viper.Get("CLOUDINARY_CLOUD_NAME").(string)
 	}
 
 	return &app

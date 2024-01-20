@@ -31,5 +31,5 @@ func InitRuter(db *gorm.DB, e *echo.Echo) {
 	e.POST("/register", authHandler.Register)
 
 	// user
-	e.GET("/user", userHandler.SelectUser, middlewares.JWTMiddleware())
+	e.PUT("/user", userHandler.UpdateUser, middlewares.JWTMiddleware())
 }

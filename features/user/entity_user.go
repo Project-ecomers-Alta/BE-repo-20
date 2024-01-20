@@ -6,7 +6,7 @@ type UserCore struct {
 	Email       string `validate:"required,email"`
 	Domicile    string `validate:"required"`
 	PhoneNumber string
-	Imgage      string
+	Image       string
 	Tagline     string
 	Province    string
 	City        string
