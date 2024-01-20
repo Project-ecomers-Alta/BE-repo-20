@@ -32,15 +32,14 @@ func (service *userService) UpdateShop(id int, input user.UserCore) error {
 
 // UpdateUser implements user.UserServiceInterface.
 func (service *userService) UpdateUser(id int, input user.UserCore) error {
-	if id <= 0 {
-		return errors.New("invalid id")
-	}
-	// fmt.Println(input)
-	err := service.userData.UpdateUser(id, input)
-	return err
+	panic("unimplemented")
 }
 
 // Delete implements user.UserServiceInterface.
 func (service *userService) Delete(id int) error {
-	panic("unimplemented")
+	if id <= 0 {
+		return errors.New("invalid id")
+	}
+	err := service.userData.Delete(id)
+	return err
 }
