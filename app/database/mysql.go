@@ -2,6 +2,7 @@ package database
 
 import (
 	"BE-REPO-20/app/configs"
+	"BE-REPO-20/features/auth/data"
 	"fmt"
 
 	"gorm.io/driver/mysql"
@@ -22,5 +23,5 @@ func InitDBMysql(cfg *configs.AppConfig) *gorm.DB {
 }
 
 func InitMigrate(db *gorm.DB) {
-	// db.AutoMigrate(&data)
+	db.AutoMigrate(&data.User{})
 }

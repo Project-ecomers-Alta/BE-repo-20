@@ -50,15 +50,18 @@ paths:
             schema:
               type: object
               properties:
-                nama_lengkap:
+                user_name:
                   type: string
-                  example: hanapi bagas pamungkas
+                  example: Toko sepatu jaya
                 email:
                   type: string
                   example: sample@gmail.com
                 password:
                   type: string
                   example: qwerty
+                domicile:
+                  type: string
+                  example: jakarta pusat
       responses:
         "200":
           $ref: "#/components/responses/ResponseRegister200"
@@ -97,6 +100,7 @@ paths:
           $ref: "#/components/responses/Response200"
         "400":
           $ref: "#/components/responses/Response400"
+
     delete:
       tags:
         - Users
@@ -114,7 +118,7 @@ paths:
         - Products
       requestBody:
         content:
-          multipart/form-data:
+          application/json:
             schema:
               $ref: "#/components/schemas/ProductSchema"
       responses:
@@ -122,6 +126,8 @@ paths:
           $ref: "#/components/responses/ResponseCreateProduct200"
         "400":
           $ref: "#/components/responses/Response400"
+
+  /product?page=1:
     get:
       tags:
         - Products
@@ -134,202 +140,95 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProductsResponse"
-
         "400":
           $ref: "#/components/responses/Response400"
 
-  /users/{users_id}/products:
+  /product/{product_id}/gambar:
+    post:
+      tags:
+        - Products
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ProductGambarSchema"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example:
+                message: "success"
+                product_id: 3
+                images_details:
+                  - images: "/path/to/image1.jpg"
+                  - images: "/path/to/image2.jpg"
+                  - images: "/path/to/image3.jpg"
+        "400":
+          description: Bad Request
+
+  /products/search:
     get:
       tags:
         - Products
-      security:
-        - BearerAuth: []
+      parameters:
+        - name: nama_product
+          in: query
+          description: nama product yang mau di cari
+          required: true
+          schema:
+            $ref: "#/components/schemas/PencarianProductSchma"
       responses:
         "200":
-          description: get all products
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProductsResponseByUser"
-
+          $ref: "#/components/responses/ResponseSearchProduct200"
         "400":
           $ref: "#/components/responses/Response400"
 
-  /product/{product_id}:
-    put:
-      tags:
-        - Products
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/ProductSchema"
-      responses:
-        "200":
-          $ref: "#/components/responses/ResponseCreateProduct200"
-        "400":
-          $ref: "#/components/responses/Response400"
-
-    delete:
-      tags:
-        - Products
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/ProductSchema"
-      responses:
-        "200":
-          $ref: "#/components/responses/ResponseCreateProduct200"
-        "400":
-          $ref: "#/components/responses/Response400"
-  # /products/{id}:
+  # /users/{users_id}/products:
   #   get:
   #     tags:
   #       - Products
-  #     parameters:
-  #       - in: path
-  #         name: id
-  #         schema:
-  #           type: number
-  #           example: 1
-  #         required: true
+  #     security:
+  #       - BearerAuth: []
   #     responses:
   #       "200":
-  #         description: get product
+  #         description: get all products
   #         content:
   #           application/json:
   #             schema:
-  #               $ref: "#/components/schemas/ProductSchema"
+  #               $ref: "#/components/schemas/ProductsResponseByUser"
+
   #       "400":
   #         $ref: "#/components/responses/Response400"
+
+  # /product/{product_id}:
   #   put:
   #     tags:
   #       - Products
-  #     parameters:
-  #       - in: path
-  #         name: id
-  #         schema:
-  #           type: number
-  #           example: 1
-  #         required: true
   #     requestBody:
   #       content:
-  #         application/json:
+  #         multipart/form-data:
   #           schema:
   #             $ref: "#/components/schemas/ProductSchema"
   #     responses:
   #       "200":
-  #         $ref: "#/components/responses/Response200"
+  #         $ref: "#/components/responses/ResponseCreateProduct200"
   #       "400":
   #         $ref: "#/components/responses/Response400"
+
   #   delete:
   #     tags:
   #       - Products
-  #     parameters:
-  #       - in: path
-  #         name: id
-  #         schema:
-  #           type: number
-  #           example: 1
-  #         required: true
-  #     responses:
-  #       "200":
-  #         $ref: "#/components/responses/Response200"
-  #       "400":
-  #         $ref: "#/components/responses/Response400"
-  # /cart:
-  #   post:
-  #     tags:
-  #       - Cart
   #     requestBody:
   #       content:
-  #         application/json:
+  #         multipart/form-data:
   #           schema:
-  #             $ref: "#/components/schemas/CartSchema"
+  #             $ref: "#/components/schemas/ProductSchema"
   #     responses:
   #       "200":
-  #         $ref: "#/components/responses/Response200"
+  #         $ref: "#/components/responses/ResponseCreateProduct200"
   #       "400":
   #         $ref: "#/components/responses/Response400"
-  #   get:
-  #     tags:
-  #       - Cart
-  #     responses:
-  #       "200":
-  #         description: get all cart
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: "#/components/schemas/ArrayOfCartSchema"
-  #       "400":
-  #         $ref: "#/components/responses/Response400"
-  # /cart/{id}:
-  #   put:
-  #     tags:
-  #       - Cart
-  #     parameters:
-  #       - in: path
-  #         name: id
-  #         schema:
-  #           type: number
-  #           example: 1
-  #         required: true
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             type: object
-  #             properties:
-  #               qty:
-  #                 type: integer
-  #                 example: 20
-  #     responses:
-  #       "200":
-  #         $ref: "#/components/responses/Response200"
-  #       "400":
-  #         $ref: "#/components/responses/Response400"
-  #   delete:
-  #     tags:
-  #       - Cart
-  #     parameters:
-  #       - in: path
-  #         name: id
-  #         schema:
-  #           type: number
-  #           example: 1
-  #         required: true
-  #     responses:
-  #       "200":
-  #         $ref: "#/components/responses/Response200"
-  #       "400":
-  #         $ref: "#/components/responses/Response400"
-  # /order:
-  # post:
-  #   tags:
-  #     - Order
-  #   requestBody:
-  #     content:
-  #       application/json:
-  #         schema:
-  #           $ref: "#/components/schemas/OrderSchema"
-  #   responses:
-  #     "200":
-  #       $ref: "#/components/responses/Response200"
-  #     "400":
-  #       $ref: "#/components/responses/Response400"
-  # get:
-  #   tags:
-  #     - Order
-  #   responses:
-  #     "200":
-  #       description: get all cart
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: "#/components/schemas/ArrayOfCartSchema"
-  #     "400":
-  #       $ref: "#/components/responses/Response400"
 
 components:
   responses:
@@ -347,12 +246,15 @@ components:
                 properties:
                   email:
                     type: string
+                  role:
+                    type: string
                   token:
                     type: string
             example:
               message: success
               data:
                 email: altacademy@gmail.com
+                role: super_admin
                 token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
     ResponseRegister200:
       description: success create
@@ -366,18 +268,22 @@ components:
               data:
                 type: object
                 properties:
-                  nama_lengkap:
+                  nama_toko:
                     type: string
                   email:
                     type: string
-                  token:
+                  role:
+                    type: string
+                  domicile:
                     type: string
             example:
               message: success
               data:
-                nama_lengkap: hanapi bagas pamungkas
+                nama_toko: Toko sepatu jaya
                 email: sample@gmail.com
-                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+                domicile: jakarta pusat
+                role: user
+
     Response200:
       description: success create
       content:
@@ -459,13 +365,43 @@ components:
                     type: string
                   price:
                     type: integer
+                  category:
+                    type: string
+                  description:
+                    type: string
+            example:
+              message: success
+              data:
+                users_id: 4
+                product_name: Grizle Sepatu Gaul Trendy 22/Sepatu Pria Import - Abu-abu, 39
+                price: 265000
+                category: sepatu cowo description:SEPATU CASUAL TRENDY ELEGAN KEKINIAN/SEPATU GAUL Sepatu Sports Import 100% ORIGINAL Kualitas bagus dengan harga terjangkau Ringan, leluasa dibawa berjalan serta nyaman saat digunakan Sepatu anti slip, tidak pengap dan juga tidak mudah lepas Model nya simple dan elegan, Trend Fashion yaaa :))
+
+    ResponseSearchProduct200:
+      description: success create
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  users_id:
+                    type: integer
+                  product_name:
+                    type: string
+                  price:
+                    type: integer
                   photo_url:
                     type: string
             example:
               message: success
               data:
                 users_id: 4
-                product_name: Lenovo 552
+                product_name: iPhone 14
                 price: 7.800.000
                 photo_url: https://s3.amazonaws.com/bucket-name/path-to-image/image.jpg
 
@@ -489,12 +425,30 @@ components:
         id:
           type: integer
           example: 1
-        name:
+        user_name:
           type: string
-          example: Alterra Academy
-        email:
+          example: Toko jaya sepatu
+        tag_line:
           type: string
-          example: Altacademy@gmail.com
+          example: Murah meria
+        province:
+          type: string
+          example: sulawesi selatan
+        city:
+          type: string
+          example: Kota makassar
+        domicile:
+          type: string
+          example: Kota makassar
+        address:
+          type: string
+          example: jln patimurah nomor 3
+        phone_number:
+          type: integer
+          example: 08123456789
+        category:
+          type: string
+          example: toko sepatu
 
     ProductsResponse:
       type: object
@@ -522,12 +476,13 @@ components:
         price:
           type: number
           example: 50000
-        photo_url:
-          type: string
-          example: https://s3.amazonaws.com/bucket-name/path-to-image/image.jpg
         users_id:
           type: integer
           example: 2
+        images_details:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetailsGambarInfo"
         user_info:
           $ref: "#/components/schemas/UserInfo"
     ProductInfo1:
@@ -594,6 +549,15 @@ components:
         email:
           type: string
           example: "sampelyoga@gmail.com"
+    DetailsGambarInfo:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          example: 1
+        images:
+          type: string
+          example: "/path/to/image3.jpg"
 
     ProductsResponseByUser:
       type: object
@@ -661,26 +625,42 @@ components:
           type: string
           example: "sampel@gmail.com"
 
-    ProductSchema:
+    PencarianProductSchma:
       type: object
       properties:
-        id:
-          type: integer
-          example: 5
         product_name:
           type: string
           example: iPhone 14
-        photo_url:
+
+    ProductSchema:
+      type: object
+      properties:
+        product_name:
           type: string
-          format: binary
+          example: Grizle Sepatu Gaul Trendy 22/Sepatu Pria Import - Abu-abu, 39
         price:
           type: integer
-          example: 20000000
+          example: 265000
         qty:
           type: integer
           example: 20
+        category:
+          type: string
+          example: sepatu cowo
         description:
           type: string
+          example: SEPATU CASUAL TRENDY ELEGAN KEKINIAN/SEPATU GAUL
+            Sepatu Sports Import 100% ORIGINAL
+            Kualitas bagus dengan harga terjangkau
+            Ringan, leluasa dibawa berjalan serta nyaman saat digunakan
+            Sepatu anti slip, tidak pengap dan juga tidak mudah lepas
+            Model nya simple dan elegan, Trend Fashion yaaa :))
+    ProductGambarSchema:
+      type: object
+      properties:
+        images:
+          type: string
+          format: binary
 
     CartSchema:
       type: object
@@ -694,28 +674,6 @@ components:
         qty:
           type: number
           example: 2
-    # ArrayOfCartSchema:
-    #   type: array
-    #   items:
-    #     allOf:
-    #       - type: object
-    #         properties:
-    #           id:
-    #             type: integer
-    #             example: 12
-    #           qty:
-    #             type: integer
-    #             example: 2
-    #           total_price:
-    #             type: integer
-    #             example: 50000
-    #           user_id:
-    #             type: integer
-    #             example: 98
-    #       - type: object
-    #         properties:
-    #           product:
-    #             $ref: "#/components/schemas/ProductSchema"
 
     OrderSchema:
       type: object
