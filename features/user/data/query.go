@@ -40,9 +40,17 @@ func (repo *userQuery) UpdateShop(id int, input user.UserCore) error {
 // UpdateUser implements user.UserDataInterface.
 func (repo *userQuery) UpdateUser(id int, input user.UserCore) error {
 	panic("unimplemented")
+
 }
 
 // Delete implements user.UserDataInterface.
 func (repo *userQuery) Delete(id int) error {
-	panic("unimplemented")
+	tx := repo.db.Delete(&User{}, id)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("error not found")
+	}
+	return nil
 }
