@@ -61,3 +61,21 @@ func (service *authService) Login(email string, password string) (data *auth.Aut
 	}
 	return data, token, err
 }
+
+func (service *authService) UptdatePassword(id uint, input auth.AuthCorePassword) error {
+	errValidate := service.validate.Struct(input)
+	if errValidate != nil {
+		return errValidate
+	}
+
+	if input.Password != "" {
+		hashedPass, errHash := service.hashService.HashPassword(input.Password)
+		if errHash != nil {
+			return errors.New("Error hash password.")
+		}
+		input.Password = hashedPass
+	}
+
+	err := service.authData.UpdatePassword(id, input)
+	return err
+}
