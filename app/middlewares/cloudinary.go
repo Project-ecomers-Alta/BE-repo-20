@@ -20,6 +20,6 @@ func CloudinaryUpload(file multipart.File) (*uploader.UploadResult, error) {
 	if errUpl != nil {
 		return nil, errUpl
 	}
-
+	fmt.Println("cloud test")
 	return url, nil
 }
