@@ -52,3 +52,75 @@ func (repo *adminQuery) SelectAllUser() ([]admin.AdminUserCore, error) {
 
 	return adminsDataCore, nil
 }
+
+// SearchUserByQuery implements admin.AdminDataInterface.
+func (repo *adminQuery) SearchUserByQuery(query string) ([]admin.AdminUserCore, error) {
+	var adminDataGorm []admin.AdminUserCore
+
+	tx := repo.db.Table("users").Where("full_name LIKE ?", "%"+query+"%").
+		Or("user_name LIKE ?", "%"+query+"%").
+		Or("email LIKE ?", "%"+query+"%").
+		Find(&adminDataGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	// Proses mapping dari struct gorm model ke struct core
+	var adminsDataCore []admin.AdminUserCore
+	for _, value := range adminDataGorm {
+		var adminCore = admin.AdminUserCore{
+			ID:        value.ID,
+			FullName:  value.FullName,
+			UserName:  value.UserName,
+			Email:     value.Email,
+			Domicile:  value.Domicile,
+			Role:      value.Role,
+			CreatedAt: value.CreatedAt,
+			UpdatedAt: value.UpdatedAt,
+		}
+		adminsDataCore = append(adminsDataCore, adminCore)
+	}
+
+	return adminsDataCore, nil
+}
+
+// SelectAllOrder implements admin.AdminDataInterface.
+func (repo *adminQuery) SelectAllOrder() ([]admin.AdminItemOrderCore, error) {
+	var orderDataGorm []ItemOrder
+	tx := repo.db.Preload("Order").Find(&orderDataGorm)
+
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	// Process mapping from gorm model struct to core struct
+	var ordersDataCore []admin.AdminItemOrderCore
+	for _, value := range orderDataGorm {
+		// Mapping data dari gorm model ke core struct
+		var orderCore = admin.AdminItemOrderCore{
+			ID:           value.ID,
+			OrderID:      value.OrderID,
+			ProductName:  value.ProductName,
+			ProductPrice: value.ProductPrice,
+			Quantity:     value.Quantity,
+			SubTotal:     value.SubTotal,
+			CreatedAt:    value.CreatedAt,
+			UpdatedAt:    value.UpdatedAt,
+			Order: admin.AdminOrderCore{
+				ID:         value.Order.ID,
+				UserID:     value.Order.UserID,
+				Address:    value.Order.Address,
+				CreditCard: value.Order.CreditCard,
+				Status:     value.Order.Status,
+				Invoice:    value.Order.Invoice,
+				Total:      value.Order.Total,
+				VirtualAcc: value.Order.VirtualAcc,
+				CreatedAt:  value.Order.CreatedAt,
+				UpdatedAt:  value.Order.UpdatedAt,
+			},
+		}
+		ordersDataCore = append(ordersDataCore, orderCore)
+	}
+
+	return ordersDataCore, nil
+}

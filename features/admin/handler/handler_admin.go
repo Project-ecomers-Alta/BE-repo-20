@@ -45,3 +45,61 @@ func (handler *AdminHandler) GetAllUsers(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse("Success reading data.", usersResult))
 }
+
+// SearchUsersByQueryHandler handles the endpoint for searching users by query.
+func (handler *AdminHandler) SearchUsersByQuery(c echo.Context) error {
+	// Dapatkan user id dari token
+	userId := middlewares.ExtractTokenUserId(c)
+
+	// Pergi ke service layer untuk mendapatkan role pengguna
+	userRole, err := handler.adminService.GetUserRoleById(userId)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("Internal Server Error", nil))
+	}
+
+	// Periksa apakah peran pengguna adalah 'admin'
+	if userRole != "admin" {
+		return c.JSON(http.StatusForbidden, responses.WebResponse("Forbidden - User is not an admin", nil))
+	}
+
+	// Dapatkan query pencarian dari parameter URL
+	query := c.QueryParam("q")
+
+	// Panggil func di service layer untuk pencarian berdasarkan query
+	results, errSearch := handler.adminService.SearchUserByQuery(query)
+	if errSearch != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("Error searching data. "+errSearch.Error(), nil))
+	}
+
+	// Proses mapping dari core ke response
+	usersResult := CoreToResponseList(results)
+
+	return c.JSON(http.StatusOK, responses.WebResponse("Success searching data.", usersResult))
+}
+
+func (handler *AdminHandler) GetAllOrders(c echo.Context) error {
+	// Dapatkan user id dari token
+	userId := middlewares.ExtractTokenUserId(c)
+
+	// Pergi ke service layer untuk mendapatkan role pengguna
+	userRole, err := handler.adminService.GetUserRoleById(userId)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("Internal Server Error", nil))
+	}
+
+	// Periksa apakah peran pengguna adalah 'admin'
+	if userRole != "admin" {
+		return c.JSON(http.StatusForbidden, responses.WebResponse("Forbidden - User is not an admin", nil))
+	}
+
+	// Jika peran pengguna adalah 'admin', panggil func di service layer
+	results, errSelect := handler.adminService.SelectAllOrder()
+	if errSelect != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("Error reading data. "+errSelect.Error(), nil))
+	}
+
+	// Proses mapping dari core ke response
+	ordersResult := CoreToItemOrderResponseList(results)
+
+	return c.JSON(http.StatusOK, responses.WebResponse("Success reading data.", ordersResult))
+}
