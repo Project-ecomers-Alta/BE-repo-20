@@ -1,7 +1,7 @@
 package data
 
 import (
-	"BE-REPO-20/features/auth"
+	"BE-REPO-20/features/user"
 
 	"gorm.io/gorm"
 )
@@ -9,7 +9,7 @@ import (
 type User struct {
 	gorm.Model
 	UserName    string `gorm:"default:null"`
-	Shopname    string `gorm:"default:null"`
+	FullName    string `gorm:"default:null"`
 	Email       string `gorm:"default:null"`
 	PhoneNumber string `gorm:"default:null"`
 	Domicile    string `gorm:"default:null"`
@@ -24,13 +24,12 @@ type User struct {
 	Category    string `gorm:"default:null"`
 }
 
-func (u User) ModelToCore() auth.AuthCore {
-	return auth.AuthCore{
-		ID:       u.ID,
-		UserName: u.UserName,
-		Email:    u.Email,
-		Domicile: u.Domicile,
-		Role:     u.Role,
-		Password: u.Password,
+func (u User) ModelToCore() user.UserCore {
+	return user.UserCore{
+		ID:          u.ID,
+		UserName:    u.UserName,
+		Email:       u.Email,
+		Domicile:    u.Domicile,
+		PhoneNumber: u.PhoneNumber,
 	}
 }

@@ -15,6 +15,16 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
+type UpdatePasswordRequest struct {
+	Password string `json:"password"`
+}
+
+func RequestToUpdatePassword(input UpdatePasswordRequest) auth.AuthCorePassword {
+	return auth.AuthCorePassword{
+		Password: input.Password,
+	}
+}
+
 func RequestToCore(input RegisterRequest) auth.AuthCore {
 	role := "user"
 	if input.Role != "" {
