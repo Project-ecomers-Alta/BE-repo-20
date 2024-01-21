@@ -41,3 +41,14 @@ func (service *adminService) SearchUserByQuery(query string) ([]admin.AdminUserC
 
 	return results, nil
 }
+
+// SelectAllOrder implements admin.AdminServiceInterface.
+func (service *adminService) SelectAllOrder() ([]admin.AdminItemOrderCore, error) {
+	// Panggil metode dari repository atau sumber data yang sesuai
+	orderCores, err := service.adminData.SelectAllOrder()
+	if err != nil {
+		// Handle kesalahan jika terjadi
+		return nil, err
+	}
+	return orderCores, nil
+}

@@ -33,4 +33,5 @@ func InitRuter(db *gorm.DB, e *echo.Echo) {
 	//admin
 	e.GET("/users", adminHandler.GetAllUsers, middlewares.JWTMiddleware())
 	e.GET("/users/search", adminHandler.SearchUsersByQuery, middlewares.JWTMiddleware())
+	e.GET("/orders", adminHandler.GetAllOrders, middlewares.JWTMiddleware())
 }
