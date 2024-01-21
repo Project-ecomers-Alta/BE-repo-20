@@ -16,6 +16,6 @@ func CoreToResponse(data user.UserCore) UserResponse {
 		Domicile:    data.Domicile,
 		Email:       data.Email,
 		PhoneNumber: data.PhoneNumber,
-		Image:       data.Image,
+		Image:       data.Imgage,
 	}
 }
