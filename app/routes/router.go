@@ -32,5 +32,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
   e.PUT("/update-password", authHandler.UpdatePassword, middlewares.JWTMiddleware())
 
 	// user
-	e.PUT("/user", userHandler.UpdateUser, middlewares.JWTMiddleware())
+	e.GET("/user", userHandler.SelectUser, middlewares.JWTMiddleware())
 }

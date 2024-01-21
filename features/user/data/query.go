@@ -2,7 +2,6 @@ package data
 
 import (
 	"BE-REPO-20/features/user"
-	"errors"
 
 	"gorm.io/gorm"
 )
@@ -24,7 +23,13 @@ func (repo *userQuery) SelectShop(id int) (*user.UserCore, error) {
 
 // SelectUser implements user.UserDataInterface.
 func (repo *userQuery) SelectUser(id int) (*user.UserCore, error) {
-	panic("unimplemented")
+	var userGorm User
+	tx := repo.db.Where("id = ?", id).First(&userGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	result := userGorm.ModelToCore()
+	return &result, nil
 }
 
 // UpdateShop implements user.UserDataInterface.
@@ -34,15 +39,7 @@ func (repo *userQuery) UpdateShop(id int, input user.UserCore) error {
 
 // UpdateUser implements user.UserDataInterface.
 func (repo *userQuery) UpdateUser(id int, input user.UserCore) error {
-	userGorm := CoreToModel(input)
-	tx := repo.db.Model(&User{}).Where("id = ?", id).Updates(userGorm)
-	if tx.Error != nil {
-		return tx.Error
-	}
-	if tx.RowsAffected == 0 {
-		return errors.New("error not found")
-	}
-	return nil
+	panic("unimplemented")
 }
 
 // Delete implements user.UserDataInterface.

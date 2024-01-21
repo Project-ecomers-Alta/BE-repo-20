@@ -31,16 +31,5 @@ func (u User) ModelToCore() user.UserCore {
 		Email:       u.Email,
 		Domicile:    u.Domicile,
 		PhoneNumber: u.PhoneNumber,
-		Image:       u.Image,
-	}
-}
-
-func CoreToModel(input user.UserCore) User {
-	return User{
-		UserName:    input.UserName,
-		Email:       input.Email,
-		Domicile:    input.Domicile,
-		PhoneNumber: input.PhoneNumber,
-		Image:       input.Image,
 	}
 }
