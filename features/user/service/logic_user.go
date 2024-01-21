@@ -2,6 +2,7 @@ package service
 
 import (
 	"BE-REPO-20/features/user"
+	"errors"
 )
 
 type userService struct {

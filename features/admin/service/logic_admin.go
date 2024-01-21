@@ -52,3 +52,19 @@ func (service *adminService) SelectAllOrder() ([]admin.AdminItemOrderCore, error
 	}
 	return orderCores, nil
 }
+
+// SearchOrderByQuery implements admin.AdminServiceInterface.
+func (service *adminService) SearchOrderByQuery(query string) ([]admin.AdminItemOrderCore, error) {
+	// Panggil fungsi pencarian dari lapisan data (misalnya adminQuery)
+	results, err := service.adminData.SearchOrderByQuery(query)
+	if err != nil {
+		return nil, err
+	}
+
+	// Jika tidak ditemukan pengguna, kembalikan array kosong
+	if len(results) == 0 {
+		return []admin.AdminItemOrderCore{}, nil
+	}
+
+	return results, nil
+}

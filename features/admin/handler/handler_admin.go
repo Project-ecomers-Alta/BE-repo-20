@@ -103,3 +103,33 @@ func (handler *AdminHandler) GetAllOrders(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse("Success reading data.", ordersResult))
 }
+
+func (handler *AdminHandler) SearchOrderByQuery(c echo.Context) error {
+	// Get user id from the token
+	userId := middlewares.ExtractTokenUserId(c)
+
+	// Get user role from the service layer
+	userRole, err := handler.adminService.GetUserRoleById(userId)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("Internal Server Error", nil))
+	}
+
+	// Check if the user role is 'admin'
+	if userRole != "admin" {
+		return c.JSON(http.StatusForbidden, responses.WebResponse("Forbidden - User is not an admin", nil))
+	}
+
+	// Get search query from the URL parameter
+	query := c.QueryParam("q")
+
+	// Call the service layer function for searching orders by query
+	results, errSearch := handler.adminService.SearchOrderByQuery(query)
+	if errSearch != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("Error searching data. "+errSearch.Error(), nil))
+	}
+
+	// Process mapping from core to response
+	ordersResult := CoreToItemOrderResponseList(results)
+
+	return c.JSON(http.StatusOK, responses.WebResponse("Success searching data.", ordersResult))
+}
