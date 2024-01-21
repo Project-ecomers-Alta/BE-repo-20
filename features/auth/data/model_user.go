@@ -9,7 +9,7 @@ import (
 type User struct {
 	gorm.Model
 	UserName    string `gorm:"default:null"`
-	FullName    string `gorm:"default:null"`
+	Shopname    string `gorm:"default:null"`
 	Email       string `gorm:"default:null"`
 	PhoneNumber string `gorm:"default:null"`
 	Domicile    string `gorm:"default:null"`
