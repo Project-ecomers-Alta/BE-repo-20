@@ -19,7 +19,7 @@ func main() {
 	e.Use(middleware.CORS())
 	e.Use(middleware.Logger())
 
-	routes.InitRuter(dbsql, e)
+	routes.InitRouter(dbsql, e)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

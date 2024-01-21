@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"BE-REPO-20/app/middlewares"
 	"BE-REPO-20/features/auth"
 	"BE-REPO-20/utils/responses"
 	"net/http"
@@ -65,4 +66,25 @@ func (handler *AuthHandler) Login(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success login.", responseData))
+}
+
+func (handler *AuthHandler) UpdatePassword(c echo.Context) error {
+	userId := middlewares.ExtractTokenUserId(c)
+
+	updatePassword := UpdatePasswordRequest{}
+	errBind := c.Bind(&updatePassword)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid"+errBind.Error(), nil))
+	}
+
+	userCore := RequestToUpdatePassword(updatePassword)
+
+	errUpdate := handler.authService.UptdatePassword(uint(userId), userCore)
+	if errUpdate != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error editing data. "+errUpdate.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, map[string]any{
+		"message": "Successful Operation",
+	})
 }

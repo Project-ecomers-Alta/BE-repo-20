@@ -62,3 +62,20 @@ func (repo *authQuery) Login(email string, password string) (data *auth.AuthCore
 
 	return &result, nil
 }
+
+func (repo *authQuery) UpdatePassword(id uint, input auth.AuthCorePassword) error {
+	authInput := User{
+		Password: input.Password,
+	}
+
+	tx := repo.db.Model(&User{}).Where("id = ?", id).Updates(&authInput)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return errors.New("edit failed, row affected = 0")
+	}
+
+	return nil
+}
