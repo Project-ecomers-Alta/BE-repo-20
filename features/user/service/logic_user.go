@@ -2,7 +2,6 @@ package service
 
 import (
 	"BE-REPO-20/features/user"
-	"errors"
 )
 
 type userService struct {
@@ -22,7 +21,11 @@ func (service *userService) SelectShop(id int) (*user.UserCore, error) {
 
 // SelectUser implements user.UserServiceInterface.
 func (service *userService) SelectUser(id int) (*user.UserCore, error) {
-	panic("unimplemented")
+	data, err := service.userData.SelectUser(id)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 // UpdateShop implements user.UserServiceInterface.

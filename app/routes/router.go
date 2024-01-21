@@ -15,7 +15,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitRuter(db *gorm.DB, e *echo.Echo) {
+func InitRouter(db *gorm.DB, e *echo.Echo) {
 	hashService := encrypts.NewHashService()
 
 	authData := _dataAuth.NewAuth(db)
@@ -28,8 +28,11 @@ func InitRuter(db *gorm.DB, e *echo.Echo) {
 
 	// login
 	e.POST("/login", authHandler.Login)
-	e.POST("/register", authHandler.Register)
+	e.POST("/register", authHandler.Register)\
+  e.PUT("/update-password", authHandler.UpdatePassword, middlewares.JWTMiddleware())
 
 	// user
+	e.GET("/user", userHandler.SelectUser, middlewares.JWTMiddleware())
 	e.DELETE("/user", userHandler.Delete, middlewares.JWTMiddleware())
+
 }
