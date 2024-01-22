@@ -14,6 +14,10 @@ import (
 	_handlerUser "BE-REPO-20/features/user/handler"
 	_serviceUser "BE-REPO-20/features/user/service"
 
+	_dataProduct "BE-REPO-20/features/product/data"
+	_handlerProduct "BE-REPO-20/features/product/handler"
+	_serviceProduct "BE-REPO-20/features/product/service"
+
 	"BE-REPO-20/utils/encrypts"
 
 	"github.com/labstack/echo/v4"
@@ -31,6 +35,14 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	adminService := _serviceAdmin.NewAdmin(adminData)
 	adminHandler := _handlerAdmin.NewAdmin(adminService)
 
+	productData := _dataProduct.NewProduct(db)
+	productService := _serviceProduct.NewProduct(productData)
+	productHandler := _handlerProduct.NewProduct(productService)
+
+	userData := _dataUser.New(db)
+	userService := _serviceUser.NewUser(userData)
+	userHandler := _handlerUser.New(userService)
+
 	// login
 	e.POST("/login", authHandler.Login)
 	e.POST("/register", authHandler.Register)
@@ -41,10 +53,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/orders", adminHandler.GetAllOrders, middlewares.JWTMiddleware())
 	e.GET("/orders/search", adminHandler.SearchOrderByQuery, middlewares.JWTMiddleware())
 
-	userData := _dataUser.New(db)
-	userService := _serviceUser.NewUser(userData)
-	userHandler := _handlerUser.New(userService)
-
 	// login
 	e.POST("/login", authHandler.Login)
 	e.POST("/register", authHandler.Register)
@@ -53,5 +61,10 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// user
 	e.GET("/user", userHandler.SelectUser, middlewares.JWTMiddleware())
 	e.DELETE("/user", userHandler.Delete, middlewares.JWTMiddleware())
+
+	// product
+	e.GET("/product", productHandler.SelectAllProduct)
+	e.GET("/product/:product_id", productHandler.SelectProductById)
+	e.POST("/product", productHandler.CreateProduct, middlewares.JWTMiddleware())
 
 }
