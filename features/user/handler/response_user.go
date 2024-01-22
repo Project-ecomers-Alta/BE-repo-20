@@ -7,7 +7,7 @@ type UserResponse struct {
 	Domicile    string `json:"domicile"`
 	Email       string `json:"email"`
 	PhoneNumber string `json:"phone_number"`
-	Image       string
+	Image       string `json:"image"`
 }
 
 func CoreToResponse(data user.UserCore) UserResponse {

@@ -31,16 +31,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	adminService := _serviceAdmin.NewAdmin(adminData)
 	adminHandler := _handlerAdmin.NewAdmin(adminService)
 
-	// login
-	e.POST("/login", authHandler.Login)
-	e.POST("/register", authHandler.Register)
-
-	//admin
-	e.GET("/users", adminHandler.GetAllUsers, middlewares.JWTMiddleware())
-	e.GET("/users/search", adminHandler.SearchUsersByQuery, middlewares.JWTMiddleware())
-	e.GET("/orders", adminHandler.GetAllOrders, middlewares.JWTMiddleware())
-	e.GET("/orders/search", adminHandler.SearchOrderByQuery, middlewares.JWTMiddleware())
-
 	userData := _dataUser.New(db)
 	userService := _serviceUser.NewUser(userData)
 	userHandler := _handlerUser.New(userService)
@@ -49,6 +39,12 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.POST("/login", authHandler.Login)
 	e.POST("/register", authHandler.Register)
 	e.PUT("/update-password", authHandler.UpdatePassword, middlewares.JWTMiddleware())
+
+	//admin
+	e.GET("/users", adminHandler.GetAllUsers, middlewares.JWTMiddleware())
+	e.GET("/users/search", adminHandler.SearchUsersByQuery, middlewares.JWTMiddleware())
+	e.GET("/orders", adminHandler.GetAllOrders, middlewares.JWTMiddleware())
+	e.GET("/orders/search", adminHandler.SearchOrderByQuery, middlewares.JWTMiddleware())
 
 	// user
 	e.GET("/user", userHandler.SelectUser, middlewares.JWTMiddleware())
