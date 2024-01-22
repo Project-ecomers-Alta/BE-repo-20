@@ -11,6 +11,7 @@ type ProductCore struct {
 	Price       uint   `validate:"required"`
 	Quantity    uint   `validate:"required"`
 	Description string
+	Category    string
 	User        user.UserCore
 }
 
@@ -20,6 +21,7 @@ type ProductDataInterface interface {
 	SelectProductById(userId int, id int) (*ProductCore, error)
 	UpdateProductById(userId int, id int, input ProductCore) error
 	DeleteProductById(userId int, id int) error
+	SearchProductByQuery(query string) ([]ProductCore, error)
 }
 
 type ProductServiceInterface interface {
@@ -28,4 +30,5 @@ type ProductServiceInterface interface {
 	SelectProductById(userId int, id int) (*ProductCore, error)
 	UpdateProductById(userId int, id int, input ProductCore) error
 	DeleteProductById(userId int, id int) error
+	SearchProductByQuery(query string) ([]ProductCore, error)
 }

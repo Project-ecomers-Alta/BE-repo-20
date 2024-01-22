@@ -11,6 +11,7 @@ type ProductResponse struct {
 	Description string
 	Quantity    uint
 	Price       uint
+	Category    string
 	User        user.UserCore
 }
 
@@ -19,6 +20,7 @@ func CoreToResponse(p product.ProductCore) ProductResponse {
 		UserId:      p.UserID,
 		Name:        p.Name,
 		Description: p.Description,
+		Category:    p.Category,
 		Quantity:    p.Quantity,
 		Price:       p.Price,
 		User: user.UserCore{

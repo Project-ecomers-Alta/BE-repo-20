@@ -15,6 +15,7 @@ type Product struct {
 	Price       uint   `gorm:"default:null"`
 	Quantity    uint   `gorm:"default:null"`
 	Description string `gorm:"default:null"`
+	Category    string `gorm:"default:null"`
 	ShopName    string `gorm:"default:null"`
 	User        _userData.User
 }
@@ -26,6 +27,7 @@ func (u Product) ModelToCore() product.ProductCore {
 		Name:        u.Name,
 		Price:       u.Price,
 		Quantity:    u.Quantity,
+		Category:    u.Category,
 		Description: u.Description,
 		User: user.UserCore{
 			ID:       u.User.ID,
@@ -60,6 +62,7 @@ func CoreToModel(p product.ProductCore) Product {
 		Name:        p.Name,
 		Price:       p.Price,
 		Quantity:    p.Quantity,
+		Category:    p.Category,
 		Description: p.Description,
 		// User:        p.User,
 	}

@@ -51,3 +51,12 @@ func (service *productService) UpdateProductById(userId int, id int, input produ
 func (service *productService) DeleteProductById(userId int, id int) error {
 	panic("unimplemented")
 }
+
+// SearchProductByQuery implements product.ProductServiceInterface.
+func (service *productService) SearchProductByQuery(query string) ([]product.ProductCore, error) {
+	data, err := service.prouctData.SearchProductByQuery(query)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}

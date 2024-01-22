@@ -65,3 +65,17 @@ func (repo *productQuery) SelectProductById(userId int, id int) (*product.Produc
 func (repo *productQuery) UpdateProductById(userId int, id int, input product.ProductCore) error {
 	panic("unimplemented")
 }
+
+// SearchProductByQuery implements product.ProductDataInterface.
+func (repo *productQuery) SearchProductByQuery(query string) ([]product.ProductCore, error) {
+	var productGorm []Product
+	tx := repo.db.Where("name LIKE ? OR category LIKE ?", "%"+query+"%", "%"+query+"%").Find(&productGorm)
+
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	itemOrderCoreList := ModelToCoreList(productGorm)
+
+	return itemOrderCoreList, nil
+}
