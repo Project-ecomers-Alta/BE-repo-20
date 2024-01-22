@@ -44,6 +44,7 @@ type AdminDataInterface interface {
 	SelectAllUser() ([]AdminUserCore, error)
 	SearchUserByQuery(query string) ([]AdminUserCore, error)
 	SelectAllOrder() ([]AdminItemOrderCore, error)
+	SearchOrderByQuery(query string) ([]AdminItemOrderCore, error)
 }
 
 type AdminServiceInterface interface {
@@ -51,4 +52,5 @@ type AdminServiceInterface interface {
 	SelectAllUser() ([]AdminUserCore, error)
 	SearchUserByQuery(query string) ([]AdminUserCore, error)
 	SelectAllOrder() ([]AdminItemOrderCore, error)
+	SearchOrderByQuery(query string) ([]AdminItemOrderCore, error)
 }

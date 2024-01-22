@@ -2,6 +2,7 @@ package data
 
 import (
 	"BE-REPO-20/features/user"
+	"errors"
 
 	"gorm.io/gorm"
 )
