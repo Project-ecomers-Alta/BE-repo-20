@@ -1,11 +1,13 @@
 FROM golang:1.19-alpine
 
-COPY . /app
+RUN mkdir /app
 
 WORKDIR /app
 
+COPY ./ /app
+
 RUN go mod tidy
 
-RUN go build -o server .
+RUN go build -o beaapi
 
-CMD ["/app/server"]
+CMD ["./beaapi"]
