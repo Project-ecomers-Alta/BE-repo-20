@@ -14,6 +14,10 @@ import (
 	_handlerUser "BE-REPO-20/features/user/handler"
 	_serviceUser "BE-REPO-20/features/user/service"
 
+	_dataProduct "BE-REPO-20/features/product/data"
+	_handlerProduct "BE-REPO-20/features/product/handler"
+	_serviceProduct "BE-REPO-20/features/product/service"
+
 	"BE-REPO-20/utils/encrypts"
 	"BE-REPO-20/utils/uploads"
 
@@ -35,7 +39,11 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	userData := _dataUser.NewUser(db, uploadService)
 	userService := _serviceUser.NewUser(userData)
-	userHandler := _handlerUser.New(userService)
+	userHandler := _handlerUser.NewUser(userService)
+
+	productData := _dataProduct.NewProduct(db)
+	productService := _serviceProduct.NewProduct(productData)
+	productHandler := _handlerProduct.NewProduct(productService)
 
 	// login
 	e.POST("/login", authHandler.Login)
@@ -54,5 +62,8 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.PUT("/user", userHandler.UpdateUser, middlewares.JWTMiddleware())
 	e.GET("/user/shop", userHandler.SelectShop, middlewares.JWTMiddleware())
 	e.PUT("/user/shop", userHandler.UpdateShop, middlewares.JWTMiddleware())
+
+	// product
+	e.GET("/product", productHandler.SelectAllProduct)
 
 }
