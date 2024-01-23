@@ -16,7 +16,6 @@ type Product struct {
 	Quantity    uint   `gorm:"default:null"`
 	Description string `gorm:"default:null"`
 	Category    string `gorm:"default:null"`
-	ShopName    string `gorm:"default:null"`
 	User        _userData.User
 }
 
