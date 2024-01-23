@@ -3,11 +3,22 @@ package handler
 import "BE-REPO-20/features/user"
 
 type UserResponse struct {
-	UserName    string `json:"user_name"`
-	Domicile    string `json:"domicile"`
-	Email       string `json:"email"`
-	PhoneNumber string `json:"phone_number"`
-	Image       string `json:"image"`
+	UserName    string
+	Domicile    string
+	Email       string
+	PhoneNumber string
+	Image       string
+}
+
+type UserShopResponse struct {
+	ShopName    string
+	Tagline     string
+	Province    string
+	City        string
+	Subdistrict string
+	Address     string
+	ShopImage   string
+	Category    string
 }
 
 func CoreToResponse(data user.UserCore) UserResponse {
@@ -17,5 +28,17 @@ func CoreToResponse(data user.UserCore) UserResponse {
 		Email:       data.Email,
 		PhoneNumber: data.PhoneNumber,
 		Image:       data.Image,
+	}
+}
+func CoreToResponseShop(data user.UserCore) UserShopResponse {
+	return UserShopResponse{
+		ShopName:    data.ShopName,
+		Tagline:     data.Tagline,
+		Province:    data.Province,
+		City:        data.City,
+		Subdistrict: data.Subdistrict,
+		Address:     data.Address,
+		ShopImage:   data.ShopImage,
+		Category:    data.Category,
 	}
 }

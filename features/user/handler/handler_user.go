@@ -92,3 +92,18 @@ func (handler *UserHandler) UpdateUser(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
 }
+
+func (handler *UserHandler) SelectShop(c echo.Context) error {
+	idJWT := middlewares.ExtractTokenUserId(c)
+	if idJWT == 0 {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("unauthorized or jwt expired", nil))
+	}
+	data, err := handler.userService.SelectShop(idJWT)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+err.Error(), nil))
+	}
+
+	result := CoreToResponseShop(*data)
+
+	return c.JSON(http.StatusOK, responses.WebResponse("read success", result))
+}
