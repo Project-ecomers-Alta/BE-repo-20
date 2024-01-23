@@ -102,5 +102,19 @@ func (repo *productQuery) UpdateProductById(userId int, id int, input product.Pr
 
 // DeleteProductById implements product.ProductDataInterface.
 func (repo *productQuery) DeleteProductById(userId int, id int) error {
-	panic("unimplemented")
+	idGorm, errGorm := repo.GetUserId(userId)
+	if errGorm != nil {
+		return errGorm
+	}
+	if userId != int(idGorm) {
+		return errors.New("id unauthorized")
+	}
+	tx := repo.db.Where("id = ? AND user_id = ?", id, userId).Delete(&Product{})
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("error not found")
+	}
+	return nil
 }

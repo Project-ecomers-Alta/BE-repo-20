@@ -69,4 +69,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/products/search", productHandler.SearchProductByQuery)
 	e.POST("/product", productHandler.CreateProduct, middlewares.JWTMiddleware())
 	e.PUT("/product/:product_id", productHandler.UpdateProduct, middlewares.JWTMiddleware())
+	e.DELETE("/product/:product_id", productHandler.DeleteProduct, middlewares.JWTMiddleware())
 }

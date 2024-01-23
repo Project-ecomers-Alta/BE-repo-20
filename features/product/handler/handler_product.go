@@ -107,5 +107,23 @@ func (handler *ProductHandler) UpdateProduct(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error update data. update failed "+err.Error(), nil))
 	}
 	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
+}
 
+func (handler *ProductHandler) DeleteProduct(c echo.Context) error {
+	idJWT := middlewares.ExtractTokenUserId(c)
+	if idJWT == 0 {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("unauthorized or jwt expired", nil))
+	}
+
+	id := c.Param("product_id")
+	idParam, errConv := strconv.Atoi(id)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. id should be number", nil))
+	}
+
+	err := handler.productService.DeleteProductById(idJWT, idParam)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete data. delete failed"+err.Error(), nil))
+	}
+	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
 }
