@@ -36,7 +36,15 @@ func (repo *productQuery) SelectAllProduct() ([]product.ProductCore, error) {
 
 // SelectProductById implements product.ProductDataInterface.
 func (repo *productQuery) SelectProductById(userId int, id int) (*product.ProductCore, error) {
-	panic("unimplemented")
+	var productGorm Product
+	tx := repo.db.Preload("User").First(&productGorm, id)
+
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	result := productGorm.ModelToCore()
+	return &result, nil
 }
 
 // SearchProductByQuery implements product.ProductDataInterface.
