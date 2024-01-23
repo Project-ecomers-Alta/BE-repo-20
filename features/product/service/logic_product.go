@@ -2,6 +2,7 @@ package service
 
 import (
 	"BE-REPO-20/features/product"
+	"errors"
 )
 
 type productService struct {
@@ -16,7 +17,24 @@ func NewProduct(repo product.ProductDataInterface) product.ProductServiceInterfa
 
 // CreateProduct implements product.ProductServiceInterface.
 func (service *productService) CreateProduct(userId int, input product.ProductCore) error {
-	panic("unimplemented")
+	if input.Name == "" {
+		return errors.New("field name must be filled")
+	}
+	if input.Price == 0 {
+		return errors.New("field price must be filled")
+	}
+	if input.Quantity == 0 {
+		return errors.New("field quantity must be filled")
+	}
+	if input.Category == "" {
+		return errors.New("field category must be filled")
+	}
+
+	err := service.prouctData.CreateProduct(userId, input)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // SelectAllProduct implements product.ProductServiceInterface.

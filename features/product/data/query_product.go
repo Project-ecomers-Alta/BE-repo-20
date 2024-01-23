@@ -2,6 +2,7 @@ package data
 
 import (
 	"BE-REPO-20/features/product"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -18,7 +19,15 @@ func NewProduct(db *gorm.DB) product.ProductDataInterface {
 
 // CreateProduct implements product.ProductDataInterface.
 func (repo *productQuery) CreateProduct(userId int, input product.ProductCore) error {
-	panic("unimplemented")
+	productGorm := CoreToModel(input)
+	tx := repo.db.Create(&productGorm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("insert product failed, row affected = 0")
+	}
+	return nil
 }
 
 // SelectAllProduct implements product.ProductDataInterface.
