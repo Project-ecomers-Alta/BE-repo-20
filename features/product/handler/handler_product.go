@@ -46,3 +46,16 @@ func (handler *ProductHandler) SelectProductById(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success read product.", productResponse))
 }
+
+func (handler *ProductHandler) SearchProductByQuery(c echo.Context) error {
+	query := c.QueryParam("q")
+
+	products, err := handler.productService.SearchProductByQuery(query)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error reading data. "+err.Error(), nil))
+	}
+
+	productsResponse := CoreToResponseList(products)
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success reading products.", productsResponse))
+}

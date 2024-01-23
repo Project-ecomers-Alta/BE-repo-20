@@ -2,8 +2,9 @@ package database
 
 import (
 	"BE-REPO-20/app/configs"
-
 	"BE-REPO-20/features/admin/data"
+	_productData "BE-REPO-20/features/product/data"
+
 	// "BE-REPO-20/features/auth/data"
 	"fmt"
 
@@ -28,5 +29,6 @@ func InitMigrate(db *gorm.DB) {
 	db.AutoMigrate(&data.User{})
 	db.AutoMigrate(&data.Order{})
 	db.AutoMigrate(&data.ItemOrder{})
+	db.AutoMigrate(&_productData.Product{})
 
 }
