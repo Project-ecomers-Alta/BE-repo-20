@@ -39,8 +39,13 @@ func (service *userService) SelectUser(id int) (*user.UserCore, error) {
 }
 
 // UpdateShop implements user.UserServiceInterface.
-func (service *userService) UpdateShop(id int, input user.UserCore) error {
-	panic("unimplemented")
+func (service *userService) UpdateShop(id int, input user.UserCore, file multipart.File, nameFile string) error {
+	if id <= 0 {
+		return errors.New("invalid id")
+	}
+
+	err := service.userData.UpdateShop(id, input, file, nameFile)
+	return err
 }
 
 // UpdateUser implements user.UserServiceInterface.
@@ -48,6 +53,7 @@ func (service *userService) UpdateUser(id int, input user.UserCore, file multipa
 	if id <= 0 {
 		return errors.New("invalid id")
 	}
+
 	err := service.userData.UpdateUser(id, input, file, nameFile)
 	return err
 }

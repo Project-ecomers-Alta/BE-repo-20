@@ -23,7 +23,7 @@ type UserDataInterface interface {
 	SelectUser(id int) (*UserCore, error)
 	SelectShop(id int) (*UserCore, error)
 	UpdateUser(id int, input UserCore, file multipart.File, nameFile string) error
-	UpdateShop(id int, input UserCore) error
+	UpdateShop(id int, input UserCore, file multipart.File, nameFile string) error
 	Delete(id int) error
 }
 
@@ -31,6 +31,6 @@ type UserServiceInterface interface {
 	SelectUser(id int) (*UserCore, error)
 	SelectShop(id int) (*UserCore, error)
 	UpdateUser(id int, input UserCore, file multipart.File, nameFile string) error
-	UpdateShop(id int, input UserCore) error
+	UpdateShop(id int, input UserCore, file multipart.File, nameFile string) error
 	Delete(id int) error
 }
