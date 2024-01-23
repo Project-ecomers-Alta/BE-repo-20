@@ -15,6 +15,7 @@ import (
 	_serviceUser "BE-REPO-20/features/user/service"
 
 	"BE-REPO-20/utils/encrypts"
+	"BE-REPO-20/utils/uploads"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -22,6 +23,7 @@ import (
 
 func InitRouter(db *gorm.DB, e *echo.Echo) {
 	hashService := encrypts.NewHashService()
+	uploadService := uploads.NewCloudService()
 
 	authData := _dataAuth.NewAuth(db)
 	authService := _serviceAuth.NewAuth(authData, hashService)
@@ -31,7 +33,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	adminService := _serviceAdmin.NewAdmin(adminData)
 	adminHandler := _handlerAdmin.NewAdmin(adminService)
 
-	userData := _dataUser.New(db)
+	userData := _dataUser.NewUser(db, uploadService)
 	userService := _serviceUser.NewUser(userData)
 	userHandler := _handlerUser.New(userService)
 
@@ -49,5 +51,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// user
 	e.GET("/user", userHandler.SelectUser, middlewares.JWTMiddleware())
 	e.DELETE("/user", userHandler.Delete, middlewares.JWTMiddleware())
+	e.PUT("/user", userHandler.UpdateUser, middlewares.JWTMiddleware())
 
 }
