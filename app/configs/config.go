@@ -18,7 +18,7 @@ type AppConfig struct {
 	DB_HOSTNAME string
 	DB_PORT     int
 	DB_NAME     string
-	// JWT_SECRET  string
+	JWT_SECRET  string
 }
 
 func InitConfig() *AppConfig {
@@ -66,7 +66,7 @@ func ReadEnv() *AppConfig {
 			return nil
 		}
 
-		// app.JWT_SECRET = viper.Get("JWT_KEY").(string)
+		app.JWT_SECRET = viper.Get("JWT_KEY").(string)
 		app.DB_USERNAME = viper.Get("DBUSER").(string)
 		app.DB_PASSWORD = viper.Get("DBPASS").(string)
 		app.DB_HOSTNAME = viper.Get("DBHOST").(string)
