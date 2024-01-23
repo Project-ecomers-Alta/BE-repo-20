@@ -48,7 +48,6 @@ func (c *cloud) Destroy(publicId string) (*uploader.DestroyResult, error) {
 	ctx := context.Background()
 
 	cldUrl := fmt.Sprintf("cloudinary://%s:%s@%s", configs.CLOUDINARY_KEY, configs.CLOUDINARY_SECRET, configs.CLOUDINARY_CLOUD_NAME)
-	fmt.Println(publicId)
 	cldService, _ := cloudinary.NewFromURL(cldUrl)
 	url, errDest := cldService.Upload.Destroy(ctx, uploader.DestroyParams{
 		PublicID:     publicId,
