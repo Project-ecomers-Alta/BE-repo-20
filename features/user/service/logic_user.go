@@ -3,6 +3,7 @@ package service
 import (
 	"BE-REPO-20/features/user"
 	"errors"
+	"mime/multipart"
 )
 
 type userService struct {
@@ -35,8 +36,12 @@ func (service *userService) UpdateShop(id int, input user.UserCore) error {
 }
 
 // UpdateUser implements user.UserServiceInterface.
-func (service *userService) UpdateUser(id int, input user.UserCore) error {
-	panic("unimplemented")
+func (service *userService) UpdateUser(id int, input user.UserCore, file multipart.File, nameFile string) error {
+	if id <= 0 {
+		return errors.New("invalid id")
+	}
+	err := service.userData.UpdateUser(id, input, file, nameFile)
+	return err
 }
 
 // Delete implements user.UserServiceInterface.
