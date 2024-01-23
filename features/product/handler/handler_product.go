@@ -81,3 +81,31 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert product", nil))
 }
+
+func (handler *ProductHandler) UpdateProduct(c echo.Context) error {
+	idJWT := middlewares.ExtractTokenUserId(c)
+	if idJWT == 0 {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("unauthorized or jwt expired", nil))
+	}
+
+	id := c.Param("product_id")
+	idParam, errConv := strconv.Atoi(id)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. id should be number", nil))
+	}
+
+	var reqDataProduct = ProductRequest{}
+	errBind := c.Bind(&reqDataProduct)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind, data not valid", nil))
+	}
+
+	productCore := RequestToCore(reqDataProduct)
+
+	err := handler.productService.UpdateProductById(idJWT, idParam, productCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error update data. update failed "+err.Error(), nil))
+	}
+	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
+
+}

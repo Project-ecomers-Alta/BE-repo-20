@@ -58,7 +58,12 @@ func (service *productService) SelectProductById(userId int, id int) (*product.P
 
 // UpdateProductById implements product.ProductServiceInterface.
 func (service *productService) UpdateProductById(userId int, id int, input product.ProductCore) error {
-	panic("unimplemented")
+	if id <= 0 {
+		return errors.New("invalid id")
+	}
+
+	err := service.prouctData.UpdateProductById(userId, id, input)
+	return err
 }
 
 // DeleteProductById implements product.ProductServiceInterface.

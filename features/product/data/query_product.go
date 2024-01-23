@@ -2,6 +2,7 @@ package data
 
 import (
 	"BE-REPO-20/features/product"
+	_userData "BE-REPO-20/features/user/data"
 	"errors"
 
 	"gorm.io/gorm"
@@ -28,6 +29,15 @@ func (repo *productQuery) CreateProduct(userId int, input product.ProductCore) e
 		return errors.New("insert product failed, row affected = 0")
 	}
 	return nil
+}
+
+func (repo *productQuery) GetUserId(userId int) (uint, error) {
+	var user _userData.User
+	if err := repo.db.Table("users").Where("id = ?", userId).First(&user).Error; err != nil {
+		return 0, err
+	}
+
+	return user.ID, nil
 }
 
 // SelectAllProduct implements product.ProductDataInterface.
@@ -72,7 +82,22 @@ func (repo *productQuery) SearchProductByQuery(query string) ([]product.ProductC
 
 // UpdateProductById implements product.ProductDataInterface.
 func (repo *productQuery) UpdateProductById(userId int, id int, input product.ProductCore) error {
-	panic("unimplemented")
+	idGorm, errGorm := repo.GetUserId(userId)
+	if errGorm != nil {
+		return errGorm
+	}
+	if userId != int(idGorm) {
+		return errors.New("id unauthorized")
+	}
+	productGorm := CoreToModel(input)
+	tx := repo.db.Model(&Product{}).Where("id = ? AND user_id = ?", id, userId).Updates(productGorm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("error not found")
+	}
+	return nil
 }
 
 // DeleteProductById implements product.ProductDataInterface.
