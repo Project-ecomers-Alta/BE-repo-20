@@ -33,7 +33,13 @@ func (repo *userQuery) GetUserImageById(userId int) (string, error) {
 
 // SelectShop implements user.UserDataInterface.
 func (repo *userQuery) SelectShop(id int) (*user.UserCore, error) {
-	panic("unimplemented")
+	var userGorm User
+	tx := repo.db.Where("id = ?", id).First(&userGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	result := userGorm.ModelToCoreShop()
+	return &result, nil
 }
 
 // SelectUser implements user.UserDataInterface.

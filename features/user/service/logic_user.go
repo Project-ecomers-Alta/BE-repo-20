@@ -18,7 +18,15 @@ func NewUser(repo user.UserDataInterface) user.UserServiceInterface {
 
 // SelectShop implements user.UserServiceInterface.
 func (service *userService) SelectShop(id int) (*user.UserCore, error) {
-	panic("unimplemented")
+	if id <= 0 {
+		return nil, errors.New("invalid id")
+	}
+
+	data, err := service.userData.SelectShop(id)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 // SelectUser implements user.UserServiceInterface.
