@@ -16,7 +16,14 @@ func NewProduct(repo product.ProductDataInterface) product.ProductServiceInterfa
 
 // CreateProduct implements product.ProductServiceInterface.
 func (service *productService) CreateProduct(userId int, input product.ProductCore) error {
-	panic("unimplemented")
+	// if input.Name == "" {
+	// 	return errors.New("buat nama project")
+	// }
+	err := service.prouctData.CreateProduct(userId, input)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // SelectAllProduct implements product.ProductServiceInterface.
@@ -50,5 +57,9 @@ func (service *productService) DeleteProductById(userId int, id int) error {
 
 // SearchProductByQuery implements product.ProductServiceInterface.
 func (service *productService) SearchProductByQuery(query string) ([]product.ProductCore, error) {
-	panic("unimplemented")
+	data, err := service.prouctData.SearchProductByQuery(query)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
