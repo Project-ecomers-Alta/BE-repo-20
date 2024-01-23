@@ -37,18 +37,6 @@ func (handler *UserHandler) SelectUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse("read success", result))
 }
 
-func (handler *UserHandler) Delete(c echo.Context) error {
-	idJWT := middlewares.ExtractTokenUserId(c)
-	if idJWT == 0 {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse("unauthorized or jwt expired", nil))
-	}
-	err := handler.userService.Delete(idJWT)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete data. delete failed"+err.Error(), nil))
-	}
-	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
-}
-
 func (handler *UserHandler) UpdateUser(c echo.Context) error {
 	var fileSize int64
 	var nameFile string
@@ -153,4 +141,16 @@ func (handler *UserHandler) SelectShop(c echo.Context) error {
 	result := CoreToResponseShop(*data)
 
 	return c.JSON(http.StatusOK, responses.WebResponse("read success", result))
+}
+
+func (handler *UserHandler) Delete(c echo.Context) error {
+	idJWT := middlewares.ExtractTokenUserId(c)
+	if idJWT == 0 {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("unauthorized or jwt expired", nil))
+	}
+	err := handler.userService.Delete(idJWT)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete data. delete failed"+err.Error(), nil))
+	}
+	return c.JSON(http.StatusOK, responses.WebResponse("success delete data", nil))
 }

@@ -56,6 +56,15 @@ func (service *productService) SelectProductById(userId int, id int) (*product.P
 	return data, nil
 }
 
+// SearchProductByQuery implements product.ProductServiceInterface.
+func (service *productService) SearchProductByQuery(query string) ([]product.ProductCore, error) {
+	data, err := service.prouctData.SearchProductByQuery(query)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
 // UpdateProductById implements product.ProductServiceInterface.
 func (service *productService) UpdateProductById(userId int, id int, input product.ProductCore) error {
 	if id <= 0 {
@@ -68,14 +77,9 @@ func (service *productService) UpdateProductById(userId int, id int, input produ
 
 // DeleteProductById implements product.ProductServiceInterface.
 func (service *productService) DeleteProductById(userId int, id int) error {
-	panic("unimplemented")
-}
-
-// SearchProductByQuery implements product.ProductServiceInterface.
-func (service *productService) SearchProductByQuery(query string) ([]product.ProductCore, error) {
-	data, err := service.prouctData.SearchProductByQuery(query)
-	if err != nil {
-		return nil, err
+	if id <= 0 {
+		return errors.New("invalid id")
 	}
-	return data, nil
+	err := service.prouctData.DeleteProductById(userId, id)
+	return err
 }
