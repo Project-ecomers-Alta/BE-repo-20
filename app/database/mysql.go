@@ -31,5 +31,6 @@ func InitMigrate(db *gorm.DB) {
 	db.AutoMigrate(&data.Order{})
 	db.AutoMigrate(&data.ItemOrder{})
 	db.AutoMigrate(&_productData.Product{})
+	db.AutoMigrate(&_productData.ProductImage{})
 	db.AutoMigrate(&_cartData.CartCore{})
 }

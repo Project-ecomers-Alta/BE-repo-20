@@ -4,7 +4,6 @@ import (
 	"BE-REPO-20/app/middlewares"
 	"BE-REPO-20/features/product"
 	"BE-REPO-20/utils/responses"
-	"fmt"
 	"mime/multipart"
 	"net/http"
 	"strconv"
@@ -50,7 +49,6 @@ func (handler *ProductHandler) SelectProductById(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+err.Error(), nil))
 	}
 	productResponse := CoreToResponse(*product)
-	fmt.Println(productResponse)
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success read product.", productResponse))
 }
@@ -87,7 +85,6 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error create product."+err.Error(), nil))
 	}
-	fmt.Println("heree")
 
 	return c.JSON(http.StatusOK, responses.WebResponse("success insert product", NewProduct))
 }
@@ -109,6 +106,7 @@ func (handler *ProductHandler) UpdateProduct(c echo.Context) error {
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind, data not valid", nil))
 	}
+	reqDataProduct.UserId = uint(idJWT)
 
 	productCore := RequestToCore(reqDataProduct)
 
@@ -116,7 +114,7 @@ func (handler *ProductHandler) UpdateProduct(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error update data. update failed "+err.Error(), nil))
 	}
-	return c.JSON(http.StatusOK, responses.WebResponse("success update data", nil))
+	return c.JSON(http.StatusOK, responses.WebResponse("success update data", reqDataProduct))
 }
 
 func (handler *ProductHandler) DeleteProduct(c echo.Context) error {
