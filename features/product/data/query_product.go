@@ -45,9 +45,9 @@ func (repo *productQuery) GetUserId(userId int) (uint, error) {
 }
 
 // SelectAllProduct implements product.ProductDataInterface.
-func (repo *productQuery) SelectAllProduct() ([]product.ProductCore, error) {
+func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.ProductCore, error) {
 	var productGorm []Product
-	tx := repo.db.Preload("User").Find(&productGorm)
+	tx := repo.db.Offset(offset).Limit(limit).Preload("User").Find(&productGorm)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -71,9 +71,9 @@ func (repo *productQuery) SelectProductById(userId int, id int) (*product.Produc
 }
 
 // SearchProductByQuery implements product.ProductDataInterface.
-func (repo *productQuery) SearchProductByQuery(query string) ([]product.ProductCore, error) {
+func (repo *productQuery) SearchProductByQuery(query string, offset, limit int) ([]product.ProductCore, error) {
 	var productGorm []Product
-	tx := repo.db.Where("name LIKE ? OR category LIKE ?", "%"+query+"%", "%"+query+"%").Find(&productGorm)
+	tx := repo.db.Where("name LIKE ? OR category LIKE ?", "%"+query+"%", "%"+query+"%").Offset(offset).Limit(limit).Find(&productGorm)
 
 	if tx.Error != nil {
 		return nil, tx.Error

@@ -39,8 +39,9 @@ func (service *productService) CreateProduct(userId int, input product.ProductCo
 }
 
 // SelectAllProduct implements product.ProductServiceInterface.
-func (service *productService) SelectAllProduct() ([]product.ProductCore, error) {
-	data, err := service.prouctData.SelectAllProduct()
+func (service *productService) SelectAllProduct(page int) ([]product.ProductCore, error) {
+	offset := (page - 1) * 10
+	data, err := service.prouctData.SelectAllProduct(offset, 10)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ func (service *productService) SelectProductById(userId int, id int) (*product.P
 }
 
 // SearchProductByQuery implements product.ProductServiceInterface.
-func (service *productService) SearchProductByQuery(query string) ([]product.ProductCore, error) {
-	data, err := service.prouctData.SearchProductByQuery(query)
+func (service *productService) SearchProductByQuery(query string, offest, limit int) ([]product.ProductCore, error) {
+	data, err := service.prouctData.SearchProductByQuery(query, offest, limit)
 	if err != nil {
 		return nil, err
 	}

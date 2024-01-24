@@ -3,6 +3,7 @@ package database
 import (
 	"BE-REPO-20/app/configs"
 	"BE-REPO-20/features/admin/data"
+	_cartData "BE-REPO-20/features/cart"
 	_productData "BE-REPO-20/features/product/data"
 
 	// "BE-REPO-20/features/auth/data"
@@ -30,5 +31,5 @@ func InitMigrate(db *gorm.DB) {
 	db.AutoMigrate(&data.Order{})
 	db.AutoMigrate(&data.ItemOrder{})
 	db.AutoMigrate(&_productData.Product{})
-
+	db.AutoMigrate(&_cartData.CartCore{})
 }

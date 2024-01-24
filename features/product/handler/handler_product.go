@@ -24,7 +24,12 @@ func NewProduct(service product.ProductServiceInterface) *ProductHandler {
 }
 
 func (handler *ProductHandler) SelectAllProduct(c echo.Context) error {
-	products, err := handler.productService.SelectAllProduct()
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil || page <= 0 {
+		page = 1
+	}
+
+	products, err := handler.productService.SelectAllProduct(page)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+err.Error(), nil))
 	}
@@ -51,9 +56,12 @@ func (handler *ProductHandler) SelectProductById(c echo.Context) error {
 }
 
 func (handler *ProductHandler) SearchProductByQuery(c echo.Context) error {
-	query := c.QueryParam("q")
+	query := c.QueryParam("search")
 
-	products, err := handler.productService.SearchProductByQuery(query)
+	offset := 0
+	limit := 10
+
+	products, err := handler.productService.SearchProductByQuery(query, offset, limit)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error reading data. "+err.Error(), nil))
 	}

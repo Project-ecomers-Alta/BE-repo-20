@@ -18,6 +18,10 @@ import (
 	_handlerProduct "BE-REPO-20/features/product/handler"
 	_serviceProduct "BE-REPO-20/features/product/service"
 
+	_dataCart "BE-REPO-20/features/cart/data"
+	_handlerCart "BE-REPO-20/features/cart/handler"
+	_serviceCart "BE-REPO-20/features/cart/service"
+
 	"BE-REPO-20/utils/encrypts"
 	"BE-REPO-20/utils/uploads"
 
@@ -45,6 +49,10 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	productService := _serviceProduct.NewProduct(productData)
 	productHandler := _handlerProduct.NewProduct(productService)
 
+	cartData := _dataCart.NewCart(db)
+	cartService := _serviceCart.NewCart(cartData)
+	carthandler := _handlerCart.NewCart(cartService)
+
 	// login
 	e.POST("/login", authHandler.Login)
 	e.POST("/register", authHandler.Register)
@@ -66,10 +74,12 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// product
 	e.GET("/product", productHandler.SelectAllProduct)
 	e.GET("/product/:product_id", productHandler.SelectProductById)
-	e.GET("/products/search", productHandler.SearchProductByQuery)
+	e.GET("/products", productHandler.SearchProductByQuery)
 	e.POST("/product", productHandler.CreateProduct, middlewares.JWTMiddleware())
 	e.PUT("/product/:product_id", productHandler.UpdateProduct, middlewares.JWTMiddleware())
 	e.DELETE("/product/:product_id", productHandler.DeleteProduct, middlewares.JWTMiddleware())
 	e.POST("/product/:product_id/image", productHandler.CreateProductImage, middlewares.JWTMiddleware())
 
+	// cart
+	e.POST("/cart/:product_id", carthandler.CreateCart, middlewares.JWTMiddleware())
 }
