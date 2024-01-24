@@ -3,6 +3,7 @@ package service
 import (
 	"BE-REPO-20/features/product"
 	"errors"
+	"mime/multipart"
 )
 
 type productService struct {
@@ -81,5 +82,14 @@ func (service *productService) DeleteProductById(userId int, id int) error {
 		return errors.New("invalid id")
 	}
 	err := service.prouctData.DeleteProductById(userId, id)
+	return err
+}
+
+func (service *productService) CreateProductImage(file multipart.File, input product.ProductImageCore, nameFile string, id int) error {
+	if id <= 0 {
+		return errors.New("invalid id")
+	}
+
+	err := service.prouctData.CreateProductImage(file, input, nameFile, id)
 	return err
 }

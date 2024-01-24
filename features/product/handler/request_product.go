@@ -13,6 +13,13 @@ type ProductRequest struct {
 	Price       uint   `json:"price"`
 }
 
+type ProductImageRequest struct {
+	ID        uint
+	ProductID uint
+	Url       string
+	PublicID  string
+}
+
 func RequestToCore(input ProductRequest) product.ProductCore {
 	return product.ProductCore{
 		UserID:      input.UserId,
@@ -21,5 +28,13 @@ func RequestToCore(input ProductRequest) product.ProductCore {
 		Quantity:    input.Quantity,
 		Description: input.Description,
 		Category:    input.Category,
+	}
+}
+
+func RequestToCoreImage(input ProductImageRequest) product.ProductImageCore {
+	return product.ProductImageCore{
+		ProductID: input.ProductID,
+		Url:       input.Url,
+		PublicID:  input.PublicID,
 	}
 }

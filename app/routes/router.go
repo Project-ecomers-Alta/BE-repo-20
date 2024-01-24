@@ -41,7 +41,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	userService := _serviceUser.NewUser(userData)
 	userHandler := _handlerUser.NewUser(userService)
 
-	productData := _dataProduct.NewProduct(db)
+	productData := _dataProduct.NewProduct(db, uploadService)
 	productService := _serviceProduct.NewProduct(productData)
 	productHandler := _handlerProduct.NewProduct(productService)
 
@@ -70,4 +70,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.POST("/product", productHandler.CreateProduct, middlewares.JWTMiddleware())
 	e.PUT("/product/:product_id", productHandler.UpdateProduct, middlewares.JWTMiddleware())
 	e.DELETE("/product/:product_id", productHandler.DeleteProduct, middlewares.JWTMiddleware())
+	e.POST("/product/:product_id/image", productHandler.CreateProductImage, middlewares.JWTMiddleware())
+
 }
