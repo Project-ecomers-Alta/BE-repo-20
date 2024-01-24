@@ -14,6 +14,14 @@ func NewProduct(repo product.ProductDataInterface) product.ProductServiceInterfa
 	}
 }
 
+func (service *productService) SearchProductByQuery(query string, offest, limit int) ([]product.ProductCore, error) {
+	data, err := service.prouctData.SearchProductByQuery(query, offest, limit)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
 // CreateProduct implements product.ProductServiceInterface.
 func (service *productService) CreateProduct(userId int, input product.ProductCore) error {
 	// if input.Name == "" {
@@ -22,10 +30,9 @@ func (service *productService) CreateProduct(userId int, input product.ProductCo
 	err := service.prouctData.CreateProduct(userId, input)
 	return err
 }
-
-// SelectAllProduct implements product.ProductServiceInterface.
-func (service *productService) SelectAllProduct() ([]product.ProductCore, error) {
-	data, err := service.prouctData.SelectAllProduct()
+func (service *productService) SelectAllProduct(page int) ([]product.ProductCore, error) {
+	offset := (page - 1) * 10
+	data, err := service.prouctData.SelectAllProduct(offset, 10)
 	if err != nil {
 		return nil, err
 	}
@@ -53,10 +60,3 @@ func (service *productService) DeleteProductById(userId int, id int) error {
 }
 
 // SearchProductByQuery implements product.ProductServiceInterface.
-func (service *productService) SearchProductByQuery(query string) ([]product.ProductCore, error) {
-	data, err := service.prouctData.SearchProductByQuery(query)
-	if err != nil {
-		return nil, err
-	}
-	return data, nil
-}

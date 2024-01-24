@@ -16,7 +16,6 @@ type Product struct {
 	Quantity    uint   `gorm:"default:null"`
 	Description string `gorm:"default:null"`
 	Category    string `gorm:"default:null"`
-	ShopName    string `gorm:"default:null"`
 	User        _userData.User
 }
 
@@ -30,9 +29,8 @@ func (u Product) ModelToCore() product.ProductCore {
 		Category:    u.Category,
 		Description: u.Description,
 		User: user.UserCore{
-			ID:       u.User.ID,
-			UserName: u.User.UserName,
-			// ShopName:    u.User.ShopName,
+			ID:          u.User.ID,
+			UserName:    u.User.UserName,
 			Email:       u.User.Email,
 			PhoneNumber: u.User.PhoneNumber,
 			Domicile:    u.User.Domicile,
@@ -42,8 +40,7 @@ func (u Product) ModelToCore() product.ProductCore {
 			City:        u.User.City,
 			Subdistrict: u.User.Subdistrict,
 			Tagline:     u.User.TagLine,
-			// ShopImage:   u.User.ShopImage,
-			Category: u.User.Category,
+			Category:    u.User.Category,
 		},
 	}
 }
@@ -64,6 +61,5 @@ func CoreToModel(p product.ProductCore) Product {
 		Quantity:    p.Quantity,
 		Category:    p.Category,
 		Description: p.Description,
-		// User:        p.User,
 	}
 }

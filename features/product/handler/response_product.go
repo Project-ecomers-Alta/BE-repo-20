@@ -2,31 +2,46 @@ package handler
 
 import (
 	"BE-REPO-20/features/product"
-	"BE-REPO-20/features/user"
 )
 
 type ProductResponse struct {
-	UserId      uint
-	Name        string
-	Description string
-	Quantity    uint
-	Price       uint
-	Category    string
-	User        user.UserCore
+	ID          uint     `json:"id"`
+	UserId      uint     `json:"user_id"`
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Quantity    uint     `json:"quantity"`
+	Price       uint     `json:"price"`
+	Category    string   `json:"category"`
+	User        UserCore `json:"user"`
+}
+
+type UserCore struct {
+	ID          uint   `json:"id"`
+	UserName    string `json:"user_name"`
+	Email       string `json:"email"`
+	Domicile    string `json:"domicile"`
+	PhoneNumber string `json:"phone_number"`
+	Image       string `json:"image"`
+	Tagline     string `json:"tag_line"`
+	Province    string `json:"provinci"`
+	City        string `json:"city"`
+	Subdistrict string `json:"subdistrict"`
+	Address     string `json:"address"`
+	Category    string `json:"category"`
 }
 
 func CoreToResponse(p product.ProductCore) ProductResponse {
 	return ProductResponse{
+		ID:          p.ID,
 		UserId:      p.UserID,
 		Name:        p.Name,
 		Description: p.Description,
 		Category:    p.Category,
 		Quantity:    p.Quantity,
 		Price:       p.Price,
-		User: user.UserCore{
-			ID:       p.User.ID,
-			UserName: p.User.UserName,
-			// ShopName:    p.User.ShopName,
+		User: UserCore{
+			ID:          p.User.ID,
+			UserName:    p.User.UserName,
 			Email:       p.User.Email,
 			PhoneNumber: p.User.PhoneNumber,
 			Domicile:    p.User.Domicile,
@@ -36,8 +51,7 @@ func CoreToResponse(p product.ProductCore) ProductResponse {
 			City:        p.User.City,
 			Subdistrict: p.User.Subdistrict,
 			Tagline:     p.User.Tagline,
-			// ShopImage:   p.User.ShopImage,
-			Category: p.User.Category,
+			Category:    p.User.Category,
 		},
 	}
 }

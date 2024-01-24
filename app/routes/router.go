@@ -18,6 +18,10 @@ import (
 	_handlerProduct "BE-REPO-20/features/product/handler"
 	_serviceProduct "BE-REPO-20/features/product/service"
 
+	_dataCart "BE-REPO-20/features/cart/data"
+	_handlerCart "BE-REPO-20/features/cart/handler"
+	_serviceCart "BE-REPO-20/features/cart/service"
+
 	"BE-REPO-20/utils/encrypts"
 
 	"github.com/labstack/echo/v4"
@@ -43,6 +47,13 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	userService := _serviceUser.NewUser(userData)
 	userHandler := _handlerUser.New(userService)
 
+	cartData := _dataCart.NewCart(db)
+	cartService := _serviceCart.NewCart(cartData)
+	carthandler := _handlerCart.NewCart(cartService)
+
+	// cart
+	e.POST("/cart/:product_id", carthandler.CreateCart, middlewares.JWTMiddleware())
+
 	// login
 	e.POST("/login", authHandler.Login)
 	e.POST("/register", authHandler.Register)
@@ -64,8 +75,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// product
 	e.GET("/product", productHandler.SelectAllProduct)
-	e.GET("/product/:product_id", productHandler.SelectProductById)
+	e.GET("/product/:product_id", productHandler.SelectProductById, middlewares.JWTMiddleware())
 	e.POST("/product", productHandler.CreateProduct, middlewares.JWTMiddleware())
-	e.GET("/products/search", productHandler.SearchProductByQuery, middlewares.JWTMiddleware())
-
+	e.GET("/products", productHandler.SearchProductByQuery, middlewares.JWTMiddleware())
 }

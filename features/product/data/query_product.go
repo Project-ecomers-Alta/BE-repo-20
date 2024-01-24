@@ -17,10 +17,24 @@ func NewProduct(db *gorm.DB) product.ProductDataInterface {
 	}
 }
 
-// SelectAllProduct implements product.ProductDataInterface.
-func (repo *productQuery) SelectAllProduct() ([]product.ProductCore, error) {
+// SearchProductByQuery implements product.ProductDataInterface.
+func (repo *productQuery) SearchProductByQuery(query string, offset, limit int) ([]product.ProductCore, error) {
 	var productGorm []Product
-	tx := repo.db.Preload("User").Find(&productGorm)
+	tx := repo.db.Where("name LIKE ? OR category LIKE ?", "%"+query+"%", "%"+query+"%").Offset(offset).Limit(limit).Find(&productGorm)
+
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	itemOrderCoreList := ModelToCoreList(productGorm)
+
+	return itemOrderCoreList, nil
+}
+
+// SelectAllProduct implements product.ProductDataInterface.
+func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.ProductCore, error) {
+	var productGorm []Product
+	tx := repo.db.Offset(offset).Limit(limit).Preload("User").Find(&productGorm)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -64,18 +78,4 @@ func (repo *productQuery) SelectProductById(userId int, id int) (*product.Produc
 // UpdateProductById implements product.ProductDataInterface.
 func (repo *productQuery) UpdateProductById(userId int, id int, input product.ProductCore) error {
 	panic("unimplemented")
-}
-
-// SearchProductByQuery implements product.ProductDataInterface.
-func (repo *productQuery) SearchProductByQuery(query string) ([]product.ProductCore, error) {
-	var productGorm []Product
-	tx := repo.db.Where("name LIKE ? OR category LIKE ?", "%"+query+"%", "%"+query+"%").Find(&productGorm)
-
-	if tx.Error != nil {
-		return nil, tx.Error
-	}
-
-	itemOrderCoreList := ModelToCoreList(productGorm)
-
-	return itemOrderCoreList, nil
 }

@@ -17,18 +17,18 @@ type ProductCore struct {
 
 type ProductDataInterface interface {
 	CreateProduct(userId int, input ProductCore) error
-	SelectAllProduct() ([]ProductCore, error)
+	SelectAllProduct(offset, limit int) ([]ProductCore, error)
 	SelectProductById(userId int, id int) (*ProductCore, error)
 	UpdateProductById(userId int, id int, input ProductCore) error
 	DeleteProductById(userId int, id int) error
-	SearchProductByQuery(query string) ([]ProductCore, error)
+	SearchProductByQuery(query string, offset, limit int) ([]ProductCore, error)
 }
 
 type ProductServiceInterface interface {
 	CreateProduct(userId int, input ProductCore) error
-	SelectAllProduct() ([]ProductCore, error)
+	SelectAllProduct(page int) ([]ProductCore, error)
 	SelectProductById(userId int, id int) (*ProductCore, error)
 	UpdateProductById(userId int, id int, input ProductCore) error
 	DeleteProductById(userId int, id int) error
-	SearchProductByQuery(query string) ([]ProductCore, error)
+	SearchProductByQuery(query string, offset, limit int) ([]ProductCore, error)
 }
