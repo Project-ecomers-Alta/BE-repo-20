@@ -86,33 +86,31 @@ func (repo *productQuery) SearchProductByQuery(query string, offset, limit int) 
 
 // UpdateProductById implements product.ProductDataInterface.
 func (repo *productQuery) UpdateProductById(userId int, id int, input product.ProductCore) error {
-	idGorm, errGorm := repo.GetUserId(userId)
-	if errGorm != nil {
-		return errGorm
+	dataProd, _ := repo.SelectProductById(userId, id)
+
+	if dataProd.UserID != uint(userId) {
+		return errors.New("user unauthorized id mismatched")
 	}
-	if userId != int(idGorm) {
-		return errors.New("id unauthorized")
-	}
+
 	productGorm := CoreToModel(input)
 	tx := repo.db.Model(&Product{}).Where("id = ? AND user_id = ?", id, userId).Updates(productGorm)
 	if tx.Error != nil {
 		return tx.Error
 	}
 	if tx.RowsAffected == 0 {
-		return errors.New("error not found")
+		return errors.New("error not found row aff")
 	}
 	return nil
 }
 
 // DeleteProductById implements product.ProductDataInterface.
 func (repo *productQuery) DeleteProductById(userId int, id int) error {
-	idGorm, errGorm := repo.GetUserId(userId)
-	if errGorm != nil {
-		return errGorm
+	dataProd, _ := repo.SelectProductById(userId, id)
+
+	if dataProd.UserID != uint(userId) {
+		return errors.New("user unauthorized id mismatched")
 	}
-	if userId != int(idGorm) {
-		return errors.New("id unauthorized")
-	}
+
 	tx := repo.db.Where("id = ? AND user_id = ?", id, userId).Delete(&Product{})
 	if tx.Error != nil {
 		return tx.Error

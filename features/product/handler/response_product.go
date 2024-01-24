@@ -55,6 +55,17 @@ func CoreToResponse(p product.ProductCore) ProductResponse {
 		},
 	}
 }
+func CoreToResponseUpdate(p product.ProductCore) ProductResponse {
+	return ProductResponse{
+		ID:          p.ID,
+		UserId:      p.UserID,
+		Name:        p.Name,
+		Description: p.Description,
+		Category:    p.Category,
+		Quantity:    p.Quantity,
+		Price:       p.Price,
+	}
+}
 
 func CoreToResponseList(p []product.ProductCore) []ProductResponse {
 	var results []ProductResponse

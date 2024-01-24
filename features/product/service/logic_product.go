@@ -54,7 +54,7 @@ func (service *productService) SelectProductById(userId int, id int) (*product.P
 	if err != nil {
 		return nil, err
 	}
-	// fmt.Println(data)
+
 	return data, nil
 }
 
