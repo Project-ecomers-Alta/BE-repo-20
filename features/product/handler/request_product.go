@@ -5,7 +5,7 @@ import (
 )
 
 type ProductRequest struct {
-	UserId      uint
+	UserId      uint   `json:"user_id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Category    string `json:"category"`

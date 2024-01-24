@@ -89,7 +89,7 @@ func (handler *ProductHandler) CreateProduct(c echo.Context) error {
 	}
 	fmt.Println("heree")
 
-	return c.JSON(http.StatusOK, responses.WebResponse("success insert product", nil))
+	return c.JSON(http.StatusOK, responses.WebResponse("success insert product", NewProduct))
 }
 
 func (handler *ProductHandler) UpdateProduct(c echo.Context) error {
