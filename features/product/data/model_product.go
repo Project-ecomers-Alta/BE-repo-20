@@ -19,6 +19,13 @@ type Product struct {
 	User        _userData.User
 }
 
+type ProductImage struct {
+	gorm.Model
+	ProductID uint
+	Url       string
+	PublicID  string
+}
+
 func (u Product) ModelToCore() product.ProductCore {
 	return product.ProductCore{
 		ID:          u.ID,
@@ -63,5 +70,22 @@ func CoreToModel(p product.ProductCore) Product {
 		Quantity:    p.Quantity,
 		Category:    p.Category,
 		Description: p.Description,
+	}
+}
+
+func (u ProductImage) ModelToCoreImage() product.ProductImageCore {
+	return product.ProductImageCore{
+		ID:        u.ID,
+		ProductID: u.ProductID,
+		Url:       u.Url,
+		PublicID:  u.PublicID,
+	}
+}
+
+func CoreToModelImage(p product.ProductImageCore) ProductImage {
+	return ProductImage{
+		ProductID: p.ProductID,
+		Url:       p.Url,
+		PublicID:  p.PublicID,
 	}
 }

@@ -3,18 +3,22 @@ package data
 import (
 	"BE-REPO-20/features/product"
 	_userData "BE-REPO-20/features/user/data"
+	"BE-REPO-20/utils/uploads"
 	"errors"
+	"mime/multipart"
 
 	"gorm.io/gorm"
 )
 
 type productQuery struct {
-	db *gorm.DB
+	db            *gorm.DB
+	uploadService uploads.CloudinaryInterface
 }
 
-func NewProduct(db *gorm.DB) product.ProductDataInterface {
+func NewProduct(db *gorm.DB, cloud uploads.CloudinaryInterface) product.ProductDataInterface {
 	return &productQuery{
-		db: db,
+		db:            db,
+		uploadService: cloud,
 	}
 }
 
@@ -115,6 +119,38 @@ func (repo *productQuery) DeleteProductById(userId int, id int) error {
 	}
 	if tx.RowsAffected == 0 {
 		return errors.New("error not found")
+	}
+	return nil
+}
+
+func (repo *productQuery) CreateProductImage(file multipart.File, input product.ProductImageCore, nameFile string, id int) error {
+	dataProd, _ := repo.SelectProductById(id, int(input.ProductID))
+
+	if dataProd.UserID != uint(id) {
+		return errors.New("user unauthorized id mismatched")
+	}
+
+	// foldering name at cloudinary
+	var folderName string = "img/items"
+
+	// upload file to cloudinary and input to db
+	if file != nil {
+		imgUrl, errUpload := repo.uploadService.Upload(file, nameFile, folderName)
+		if errUpload != nil {
+			return errors.New("error upload img")
+		}
+		input.PublicID = imgUrl.PublicID
+		input.Url = imgUrl.SecureURL
+	}
+
+	imageProd := CoreToModelImage(input)
+
+	tx := repo.db.Create(&imageProd)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("insert product image failed, row affected = 0")
 	}
 	return nil
 }
