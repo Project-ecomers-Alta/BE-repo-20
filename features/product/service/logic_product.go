@@ -2,6 +2,7 @@ package service
 
 import (
 	"BE-REPO-20/features/product"
+	"errors"
 )
 
 type productService struct {
@@ -62,4 +63,14 @@ func (service *productService) SearchProductByQuery(query string) ([]product.Pro
 		return nil, err
 	}
 	return data, nil
+}
+
+// AddImageProduct implements product.ProductServiceInterface.
+func (service *productService) AddImageProduct(productID int, image string) error {
+	if productID <= 0 {
+		return errors.New("invalid id")
+	}
+
+	err := service.prouctData.AddImageProduct(productID, image)
+	return err
 }

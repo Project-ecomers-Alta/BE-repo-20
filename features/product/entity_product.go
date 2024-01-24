@@ -15,6 +15,13 @@ type ProductCore struct {
 	User        user.UserCore
 }
 
+type ImageCore struct {
+	ID        uint
+	ProductID uint
+	UrlImage  string
+	Product   ProductCore
+}
+
 type ProductDataInterface interface {
 	CreateProduct(userId int, input ProductCore) error
 	SelectAllProduct() ([]ProductCore, error)
@@ -22,6 +29,7 @@ type ProductDataInterface interface {
 	UpdateProductById(userId int, id int, input ProductCore) error
 	DeleteProductById(userId int, id int) error
 	SearchProductByQuery(query string) ([]ProductCore, error)
+	AddImageProduct(productID int, image string) error
 }
 
 type ProductServiceInterface interface {
@@ -31,4 +39,5 @@ type ProductServiceInterface interface {
 	UpdateProductById(userId int, id int, input ProductCore) error
 	DeleteProductById(userId int, id int) error
 	SearchProductByQuery(query string) ([]ProductCore, error)
+	AddImageProduct(productID int, image string) error
 }

@@ -11,7 +11,10 @@ require (
 	gorm.io/gorm v1.25.5
 )
 
+require github.com/jmespath/go-jmespath v0.4.0 // indirect
+
 require (
+	github.com/aws/aws-sdk-go v1.50.2
 	github.com/cloudinary/cloudinary-go/v2 v2.7.0 // indirect
 	github.com/creasty/defaults v1.5.1 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect

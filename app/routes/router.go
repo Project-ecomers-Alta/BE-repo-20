@@ -5,6 +5,7 @@ import (
 	_dataAuth "BE-REPO-20/features/auth/data"
 	_handlerAuth "BE-REPO-20/features/auth/handler"
 	_serviceAuth "BE-REPO-20/features/auth/service"
+	"log"
 
 	_dataAdmin "BE-REPO-20/features/admin/data"
 	_handlerAdmin "BE-REPO-20/features/admin/handler"
@@ -18,6 +19,7 @@ import (
 	_handlerProduct "BE-REPO-20/features/product/handler"
 	_serviceProduct "BE-REPO-20/features/product/service"
 
+	"BE-REPO-20/utils/aws"
 	"BE-REPO-20/utils/encrypts"
 	"BE-REPO-20/utils/uploads"
 
@@ -28,6 +30,10 @@ import (
 func InitRouter(db *gorm.DB, e *echo.Echo) {
 	hashService := encrypts.NewHashService()
 	uploadService := uploads.NewCloudService()
+	awsService, err := aws.NewSession()
+	if err != nil {
+		log.Fatal("Failed to create AWS session:", err)
+	}
 
 	authData := _dataAuth.NewAuth(db)
 	authService := _serviceAuth.NewAuth(authData, hashService)
@@ -43,7 +49,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	productData := _dataProduct.NewProduct(db)
 	productService := _serviceProduct.NewProduct(productData)
-	productHandler := _handlerProduct.NewProduct(productService)
+	productHandler := _handlerProduct.NewProduct(productService, awsService)
 
 	// login
 	e.POST("/login", authHandler.Login)
@@ -67,6 +73,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("/product", productHandler.SelectAllProduct)
 	e.GET("/product/:product_id", productHandler.SelectProductById)
 	e.POST("/product", productHandler.CreateProduct, middlewares.JWTMiddleware())
-	e.GET("/products/search", productHandler.SearchProductByQuery, middlewares.JWTMiddleware())
+	e.GET("/products/search", productHandler.SearchProductByQuery)
+	e.POST("/product/:product_id/image", productHandler.AddImageProduct, middlewares.JWTMiddleware())
 
 }

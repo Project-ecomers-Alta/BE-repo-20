@@ -20,6 +20,13 @@ type Product struct {
 	User        _userData.User
 }
 
+type Image struct {
+	gorm.Model
+	ProductID uint
+	UrlImage  string `gorm:"default:null"`
+	Product   Product
+}
+
 func (u Product) ModelToCore() product.ProductCore {
 	return product.ProductCore{
 		ID:          u.ID,

@@ -79,3 +79,23 @@ func (repo *productQuery) SearchProductByQuery(query string) ([]product.ProductC
 
 	return itemOrderCoreList, nil
 }
+
+// AddImageProduct implements product.ProductDataInterface.
+func (repo *productQuery) AddImageProduct(productID int, urlImage string) error {
+	// Convert productID to uint
+	uintProductID := uint(productID)
+
+	// Create a new image record with the converted productID
+	productImage := Image{
+		ProductID: uintProductID,
+		UrlImage:  urlImage,
+	}
+
+	// Insert the image into the database
+	tx := repo.db.Create(&productImage)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	return nil
+}

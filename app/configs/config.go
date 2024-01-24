@@ -13,6 +13,10 @@ var (
 	CLOUDINARY_KEY        string
 	CLOUDINARY_SECRET     string
 	CLOUDINARY_CLOUD_NAME string
+	AWS_AccessKeyID       string
+	AWS_SecretAccessKey   string
+	AWS_BucketName        string
+	AWS_Region            string
 )
 
 type AppConfig struct {
@@ -79,6 +83,10 @@ func ReadEnv() *AppConfig {
 		CLOUDINARY_KEY = viper.Get("CLOUDINARY_KEY").(string)
 		CLOUDINARY_SECRET = viper.Get("CLOUDINARY_SECRET").(string)
 		CLOUDINARY_CLOUD_NAME = viper.Get("CLOUDINARY_CLOUD_NAME").(string)
+		AWS_AccessKeyID = viper.Get("AWS_AccessKeyID").(string)
+		AWS_SecretAccessKey = viper.Get("AWS_SecretAccessKey").(string)
+		AWS_BucketName = viper.Get("AWS_BucketName").(string)
+		AWS_Region = viper.Get("AWS_Region").(string)
 	}
 
 	return &app
