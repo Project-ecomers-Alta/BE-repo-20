@@ -18,7 +18,6 @@ type UserShopResponse struct {
 	Subdistrict string
 	Address     string
 	ShopImage   string
-	Category    string
 }
 
 func CoreToResponse(data user.UserCore) UserResponse {
@@ -39,6 +38,5 @@ func CoreToResponseShop(data user.UserCore) UserShopResponse {
 		Subdistrict: data.Subdistrict,
 		Address:     data.Address,
 		ShopImage:   data.ShopImage,
-		Category:    data.Category,
 	}
 }

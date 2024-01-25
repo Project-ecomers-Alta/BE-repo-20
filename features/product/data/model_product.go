@@ -10,13 +10,14 @@ import (
 
 type Product struct {
 	gorm.Model
-	UserID      uint
-	Name        string `gorm:"default:null"`
-	Price       uint   `gorm:"default:null"`
-	Quantity    uint   `gorm:"default:null"`
-	Description string `gorm:"default:null"`
-	Category    string `gorm:"default:null"`
-	User        _userData.User
+	UserID        uint
+	Name          string `gorm:"default:null"`
+	Price         uint   `gorm:"default:null"`
+	Quantity      uint   `gorm:"default:null"`
+	Description   string `gorm:"default:null"`
+	Category      string `gorm:"default:null"`
+	User          _userData.User
+	ProductImages []ProductImage
 }
 
 type ProductImage struct {
@@ -33,8 +34,8 @@ func (u Product) ModelToCore() product.ProductCore {
 		Name:        u.Name,
 		Price:       u.Price,
 		Quantity:    u.Quantity,
-		Category:    u.Category,
 		Description: u.Description,
+		Category:    u.Category,
 		User: user.UserCore{
 			ID:          u.User.ID,
 			UserName:    u.User.UserName,
@@ -49,8 +50,8 @@ func (u Product) ModelToCore() product.ProductCore {
 			Subdistrict: u.User.Subdistrict,
 			Tagline:     u.User.TagLine,
 			ShopImage:   u.User.ShopImage,
-			Category:    u.User.Category,
 		},
+		ProductImages: ProductImageGormToCore(u.ProductImages),
 	}
 }
 
@@ -88,4 +89,17 @@ func CoreToModelImage(p product.ProductImageCore) ProductImage {
 		Url:       p.Url,
 		PublicID:  p.PublicID,
 	}
+}
+
+func ProductImageGormToCore(p []ProductImage) []product.ProductImageCore {
+	var results []product.ProductImageCore
+	for _, v := range p {
+		results = append(results, product.ProductImageCore{
+			ID:        v.ID,
+			ProductID: v.ProductID,
+			Url:       v.Url,
+			PublicID:  v.PublicID,
+		})
+	}
+	return results
 }

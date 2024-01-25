@@ -94,3 +94,12 @@ func (service *productService) CreateProductImage(file multipart.File, input pro
 	err := service.prouctData.CreateProductImage(file, input, nameFile, id)
 	return err
 }
+
+func (service *productService) DeleteProductImageById(userId, produductId, idImage int) error {
+	if idImage <= 0 {
+		return errors.New("invalid id")
+	}
+
+	err := service.prouctData.DeleteProductImageById(userId, produductId, idImage)
+	return err
+}

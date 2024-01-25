@@ -57,6 +57,18 @@ func ReadEnv() *AppConfig {
 		app.DB_NAME = val
 		isRead = false
 	}
+	if val, found := os.LookupEnv("CLOUDINARY_KEY"); found {
+		CLOUDINARY_KEY = val
+		isRead = false
+	}
+	if val, found := os.LookupEnv("CLOUDINARY_SECRET"); found {
+		CLOUDINARY_SECRET = val
+		isRead = false
+	}
+	if val, found := os.LookupEnv("CLOUDINARY_CLOUD_NAME"); found {
+		CLOUDINARY_CLOUD_NAME = val
+		isRead = false
+	}
 
 	if isRead {
 		viper.AddConfigPath(".")

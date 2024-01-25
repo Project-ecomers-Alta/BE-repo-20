@@ -6,14 +6,15 @@ import (
 )
 
 type ProductCore struct {
-	ID          uint
-	UserID      uint
-	Name        string `validate:"required"`
-	Price       uint   `validate:"required"`
-	Quantity    uint   `validate:"required"`
-	Description string
-	Category    string
-	User        user.UserCore
+	ID            uint
+	UserID        uint
+	Name          string `validate:"required"`
+	Price         uint   `validate:"required"`
+	Quantity      uint   `validate:"required"`
+	Description   string
+	Category      string
+	User          user.UserCore
+	ProductImages []ProductImageCore
 }
 
 type ProductImageCore struct {
@@ -31,6 +32,7 @@ type ProductDataInterface interface {
 	DeleteProductById(userId int, id int) error
 	SearchProductByQuery(query string, offset, limit int) ([]ProductCore, error)
 	CreateProductImage(file multipart.File, input ProductImageCore, nameFile string, id int) error
+	DeleteProductImageById(userId, productId, idImage int) error
 }
 
 type ProductServiceInterface interface {
@@ -41,4 +43,5 @@ type ProductServiceInterface interface {
 	DeleteProductById(userId int, id int) error
 	SearchProductByQuery(query string, offset, limit int) ([]ProductCore, error)
 	CreateProductImage(file multipart.File, input ProductImageCore, nameFile string, id int) error
+	DeleteProductImageById(userId, productId, idImage int) error
 }

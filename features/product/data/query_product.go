@@ -22,6 +22,20 @@ func NewProduct(db *gorm.DB, cloud uploads.CloudinaryInterface) product.ProductD
 	}
 }
 
+func (repo *productQuery) GetTotalImagesOfProduct(productId int) (uint, error) {
+	var productImg []ProductImage
+	var result uint
+	if err := repo.db.Table("product_images").Where("product_id = ?", productId).Find(&productImg).Error; err != nil {
+		return 0, err
+	}
+	result = uint(len(productImg))
+	if result < 1 {
+		return 0, nil
+	}
+
+	return result, nil
+}
+
 // CreateProduct implements product.ProductDataInterface.
 func (repo *productQuery) CreateProduct(userId int, input product.ProductCore) error {
 	productGorm := CoreToModel(input)
@@ -47,7 +61,7 @@ func (repo *productQuery) GetUserId(userId int) (uint, error) {
 // SelectAllProduct implements product.ProductDataInterface.
 func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.ProductCore, error) {
 	var productGorm []Product
-	tx := repo.db.Offset(offset).Limit(limit).Preload("User").Find(&productGorm)
+	tx := repo.db.Offset(offset).Limit(limit).Preload("User").Preload("ProductImages").Find(&productGorm)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -60,7 +74,7 @@ func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.Product
 // SelectProductById implements product.ProductDataInterface.
 func (repo *productQuery) SelectProductById(userId int, id int) (*product.ProductCore, error) {
 	var productGorm Product
-	tx := repo.db.Preload("User").First(&productGorm, id)
+	tx := repo.db.Preload("User").Preload("ProductImages").First(&productGorm, id)
 
 	if tx.Error != nil {
 		return nil, tx.Error
@@ -123,9 +137,17 @@ func (repo *productQuery) DeleteProductById(userId int, id int) error {
 
 func (repo *productQuery) CreateProductImage(file multipart.File, input product.ProductImageCore, nameFile string, id int) error {
 	dataProd, _ := repo.SelectProductById(id, int(input.ProductID))
-
 	if dataProd.UserID != uint(id) {
 		return errors.New("user unauthorized id mismatched")
+	}
+
+	numberImg, err := repo.GetTotalImagesOfProduct(int(input.ProductID))
+	if err != nil {
+		return errors.New("user unauthorized id mismatched")
+	}
+
+	if numberImg > 2 {
+		return errors.New("the number of images meets the limit")
 	}
 
 	// foldering name at cloudinary
@@ -149,6 +171,39 @@ func (repo *productQuery) CreateProductImage(file multipart.File, input product.
 	}
 	if tx.RowsAffected == 0 {
 		return errors.New("insert product image failed, row affected = 0")
+	}
+	return nil
+}
+
+func (repo *productQuery) DeleteProductImageById(userId, productId, idImage int) error {
+	dataProd, _ := repo.SelectProductById(userId, productId)
+	if dataProd.UserID != uint(userId) {
+		return errors.New("user unauthorized id mismatched")
+	}
+
+	if idImage < 1 {
+		return errors.New("error image product not found")
+	}
+
+	// get public id
+	var prodImage ProductImage
+	txProd := repo.db.Table("product_images").Where("id = ?", idImage).First(&prodImage)
+	if txProd.Error != nil {
+		return txProd.Error
+	}
+
+	if txProd.RowsAffected == 0 {
+		return errors.New("insert product image failed, row affected = 0")
+	}
+	publicId := prodImage.PublicID
+	repo.uploadService.Destroy(publicId)
+
+	tx := repo.db.Where("id = ?", idImage).Delete(&ProductImage{})
+	if tx.Error != nil {
+		return tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return errors.New("error not found")
 	}
 	return nil
 }
