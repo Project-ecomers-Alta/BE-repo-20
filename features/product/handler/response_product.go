@@ -5,14 +5,22 @@ import (
 )
 
 type ProductResponse struct {
-	ID          uint     `json:"id"`
-	UserId      uint     `json:"user_id"`
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Quantity    uint     `json:"quantity"`
-	Price       uint     `json:"price"`
-	Category    string   `json:"category"`
-	User        UserCore `json:"user"`
+	ID            uint     `json:"id"`
+	UserId        uint     `json:"user_id"`
+	Name          string   `json:"name"`
+	Description   string   `json:"description"`
+	Quantity      uint     `json:"quantity"`
+	Price         uint     `json:"price"`
+	Category      string   `json:"category"`
+	User          UserCore `json:"user"`
+	ProductImages []ProductImageResponse
+}
+
+type ProductImageResponse struct {
+	ID        uint
+	ProductID uint
+	Url       string
+	PublicID  string
 }
 
 type UserCore struct {
@@ -53,6 +61,7 @@ func CoreToResponse(p product.ProductCore) ProductResponse {
 			Tagline:     p.User.Tagline,
 			Category:    p.User.Category,
 		},
+		ProductImages: ProductImageCoreToResponse(p.ProductImages),
 	}
 }
 func CoreToResponseUpdate(p product.ProductCore) ProductResponse {
@@ -71,6 +80,19 @@ func CoreToResponseList(p []product.ProductCore) []ProductResponse {
 	var results []ProductResponse
 	for _, v := range p {
 		results = append(results, CoreToResponse(v))
+	}
+	return results
+}
+
+func ProductImageCoreToResponse(p []product.ProductImageCore) []ProductImageResponse {
+	var results []ProductImageResponse
+	for _, v := range p {
+		results = append(results, ProductImageResponse{
+			ID:        v.ID,
+			ProductID: v.ProductID,
+			Url:       v.Url,
+			PublicID:  v.PublicID,
+		})
 	}
 	return results
 }

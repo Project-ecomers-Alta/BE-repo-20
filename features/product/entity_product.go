@@ -6,14 +6,15 @@ import (
 )
 
 type ProductCore struct {
-	ID          uint
-	UserID      uint
-	Name        string `validate:"required"`
-	Price       uint   `validate:"required"`
-	Quantity    uint   `validate:"required"`
-	Description string
-	Category    string
-	User        user.UserCore
+	ID            uint
+	UserID        uint
+	Name          string `validate:"required"`
+	Price         uint   `validate:"required"`
+	Quantity      uint   `validate:"required"`
+	Description   string
+	Category      string
+	User          user.UserCore
+	ProductImages []ProductImageCore
 }
 
 type ProductImageCore struct {
