@@ -63,7 +63,7 @@ func (handler *AdminHandler) SearchUsersByQuery(c echo.Context) error {
 	}
 
 	// Dapatkan query pencarian dari parameter URL
-	query := c.QueryParam("q")
+	query := c.QueryParam("search")
 
 	// Panggil func di service layer untuk pencarian berdasarkan query
 	results, errSearch := handler.adminService.SearchUserByQuery(query)
@@ -120,7 +120,7 @@ func (handler *AdminHandler) SearchOrderByQuery(c echo.Context) error {
 	}
 
 	// Get search query from the URL parameter
-	query := c.QueryParam("q")
+	query := c.QueryParam("search")
 
 	// Call the service layer function for searching orders by query
 	results, errSearch := handler.adminService.SearchOrderByQuery(query)
