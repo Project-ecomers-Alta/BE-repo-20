@@ -188,3 +188,28 @@ func (handler *ProductHandler) CreateProductImage(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, responses.WebResponse("success post image data", nil))
 }
+
+func (handler *ProductHandler) DeleteProductImageId(c echo.Context) error {
+	idJWT := middlewares.ExtractTokenUserId(c)
+	if idJWT == 0 {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("unauthorized or jwt expired", nil))
+	}
+
+	id := c.Param("product_id")
+	idParamProduct, errConv := strconv.Atoi(id)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. id should be number", nil))
+	}
+
+	idImg := c.Param("image_id")
+	idParamImg, errConv := strconv.Atoi(idImg)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error. id should be number", nil))
+	}
+
+	err := handler.productService.DeleteProductImageById(idJWT, idParamProduct, idParamImg)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete image data. delete image failed "+err.Error(), nil))
+	}
+	return c.JSON(http.StatusOK, responses.WebResponse("success delete image data", nil))
+}
