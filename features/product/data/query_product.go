@@ -22,6 +22,19 @@ func NewProduct(db *gorm.DB, cloud uploads.CloudinaryInterface) product.ProductD
 	}
 }
 
+// ListProductPenjualan implements product.ProductDataInterface.
+func (repo *productQuery) ListProductPenjualan(offset int, limit int, userId uint) ([]product.ProductCore, error) {
+	var productData []Product
+	tx := repo.db.Where("user_id = ?", userId).Offset(offset).Limit(limit).Preload("User").Preload("ProductImages").Find(&productData)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	produtCore := ModelToCoreList(productData)
+
+	return produtCore, nil
+}
+
 // SelectAllProduct implements product.ProductDataInterface.
 func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.ProductCore, error) {
 	var productGorm []Product

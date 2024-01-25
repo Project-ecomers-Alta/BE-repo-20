@@ -79,7 +79,3 @@ func (service *authService) UptdatePassword(id uint, input auth.AuthCorePassword
 	err := service.authData.UpdatePassword(id, input)
 	return err
 }
-
-func (service *authService) CheckPassword(savedPassword, inputPassword string) bool {
-	return service.hashService.CheckPasswordHash(savedPassword, inputPassword)
-}

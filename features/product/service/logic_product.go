@@ -16,6 +16,13 @@ func NewProduct(repo product.ProductDataInterface) product.ProductServiceInterfa
 	}
 }
 
+// ListProductPenjualan implements product.ProductServiceInterface.
+func (service *productService) ListProductPenjualan(page int, userId uint) ([]product.ProductCore, error) {
+	offset := (page - 1) * 10
+	result, err := service.prouctData.ListProductPenjualan(offset, 10, userId)
+	return result, err
+}
+
 // SelectAllProduct implements product.ProductServiceInterface.
 func (service *productService) SelectAllProduct(page int) ([]product.ProductCore, error) {
 	offset := (page - 1) * 10

@@ -26,5 +26,4 @@ type AuthServiceInterface interface {
 	Register(input AuthCore) (data *AuthCore, token string, err error)
 	Login(email, password string) (data *AuthCore, token string, err error)
 	UptdatePassword(id uint, input AuthCorePassword) error
-	CheckPassword(savedPassword, inputPassword string) bool
 }

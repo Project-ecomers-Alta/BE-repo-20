@@ -22,6 +22,24 @@ func NewProduct(service product.ProductServiceInterface) *ProductHandler {
 	}
 }
 
+func (handler *ProductHandler) ListProductPenjualan(c echo.Context) error {
+	idJWT := middlewares.ExtractTokenUserId(c)
+	userID := uint(idJWT)
+	page, err := strconv.Atoi(c.QueryParam("page"))
+	if err != nil || page <= 0 {
+		page = 1
+	}
+
+	products, err := handler.productService.ListProductPenjualan(page, userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+err.Error(), nil))
+	}
+
+	productsResponse := CoreToResponseList(products)
+
+	return c.JSON(http.StatusOK, responses.WebResponse("success read products.", productsResponse))
+}
+
 func (handler *ProductHandler) SelectAllProduct(c echo.Context) error {
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil || page <= 0 {
