@@ -61,7 +61,7 @@ func (repo *productQuery) GetUserId(userId int) (uint, error) {
 // SelectAllProduct implements product.ProductDataInterface.
 func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.ProductCore, error) {
 	var productGorm []Product
-	tx := repo.db.Offset(offset).Limit(limit).Preload("User").Find(&productGorm)
+	tx := repo.db.Offset(offset).Limit(limit).Preload("User").Preload("ProductImages").Find(&productGorm)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -74,7 +74,7 @@ func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.Product
 // SelectProductById implements product.ProductDataInterface.
 func (repo *productQuery) SelectProductById(userId int, id int) (*product.ProductCore, error) {
 	var productGorm Product
-	tx := repo.db.Preload("User").First(&productGorm, id)
+	tx := repo.db.Preload("User").Preload("ProductImages").First(&productGorm, id)
 
 	if tx.Error != nil {
 		return nil, tx.Error
