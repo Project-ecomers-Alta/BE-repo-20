@@ -40,6 +40,5 @@ func RequestToCoreShop(input UserShopRequest) user.UserCore {
 		Subdistrict: input.Subdistrict,
 		Address:     input.Address,
 		ShopImage:   input.ShopImage,
-		Category:    input.Category,
 	}
 }
