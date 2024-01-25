@@ -67,3 +67,11 @@ func CoreToResponse(c _cart.CartCore) CartResponse {
 		},
 	}
 }
+
+func CoreToResponseList(c []_cart.CartCore) []CartResponse {
+	var results []CartResponse
+	for _, v := range c {
+		results = append(results, CoreToResponse(v))
+	}
+	return results
+}

@@ -18,3 +18,8 @@ func (service *cartService) CreateCart(userId int, productId uint) error {
 	err := service.cartData.CreateCart(userId, productId)
 	return err
 }
+
+func (service *cartService) SelectAllCart(userId uint) ([]_cart.CartCore, error) {
+	result, err := service.cartData.SelectAllCart(userId)
+	return result, err
+}
