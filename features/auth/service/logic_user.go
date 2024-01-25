@@ -48,7 +48,7 @@ func (service *authService) Login(email string, password string) (data *auth.Aut
 
 	data, err = service.authData.Login(email, password)
 	if err != nil {
-		return nil, "", err
+		return nil, "", errors.New("Email atau password salah")
 	}
 	isValid := service.hashService.CheckPasswordHash(data.Password, password)
 	if !isValid {
@@ -78,4 +78,8 @@ func (service *authService) UptdatePassword(id uint, input auth.AuthCorePassword
 
 	err := service.authData.UpdatePassword(id, input)
 	return err
+}
+
+func (service *authService) CheckPassword(savedPassword, inputPassword string) bool {
+	return service.hashService.CheckPasswordHash(savedPassword, inputPassword)
 }

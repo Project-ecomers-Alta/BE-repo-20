@@ -4,6 +4,7 @@ import (
 	"BE-REPO-20/app/middlewares"
 	"BE-REPO-20/features/auth"
 	"BE-REPO-20/utils/responses"
+	"errors"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -53,7 +54,19 @@ func (handler *AuthHandler) Login(c echo.Context) error {
 
 	result, token, err := handler.authService.Login(reqData.Email, reqData.Password)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid"+errBind.Error(), nil))
+		if errors.Is(err, errors.New("email dan password wajib diisi")) {
+			return c.JSON(http.StatusBadRequest, responses.WebResponse(err.Error(), nil))
+		} else if errors.Is(err, errors.New("password tidak sesuai.")) {
+			return c.JSON(http.StatusUnauthorized, responses.WebResponse(err.Error(), nil))
+		} else {
+			return c.JSON(http.StatusInternalServerError, responses.WebResponse(err.Error(), nil))
+		}
+	}
+
+	// Check if the provided password matches the one stored in the database
+	isValidPassword := handler.authService.CheckPassword(reqData.Password, result.Password)
+	if !isValidPassword {
+		return c.JSON(http.StatusUnauthorized, responses.WebResponse("password tidak sesuai.", nil))
 	}
 
 	responseData := map[string]any{

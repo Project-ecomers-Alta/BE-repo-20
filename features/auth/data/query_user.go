@@ -5,11 +5,18 @@ import (
 	"BE-REPO-20/features/auth"
 	"errors"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 type authQuery struct {
 	db *gorm.DB
+}
+
+// CheckPassword implements auth.AuthDataInterface.
+func (repo *authQuery) CheckPassword(savedPassword, inputPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(savedPassword), []byte(inputPassword))
+	return err == nil
 }
 
 func NewAuth(db *gorm.DB) auth.AuthDataInterface {
