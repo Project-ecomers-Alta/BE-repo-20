@@ -16,6 +16,16 @@ func NewProduct(repo product.ProductDataInterface) product.ProductServiceInterfa
 	}
 }
 
+// SelectAllProduct implements product.ProductServiceInterface.
+func (service *productService) SelectAllProduct(page int) ([]product.ProductCore, error) {
+	offset := (page - 1) * 10
+	data, err := service.prouctData.SelectAllProduct(offset, 10)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
 // CreateProduct implements product.ProductServiceInterface.
 func (service *productService) CreateProduct(userId int, input product.ProductCore) error {
 	if input.Name == "" {
@@ -36,16 +46,6 @@ func (service *productService) CreateProduct(userId int, input product.ProductCo
 		return err
 	}
 	return nil
-}
-
-// SelectAllProduct implements product.ProductServiceInterface.
-func (service *productService) SelectAllProduct(page int) ([]product.ProductCore, error) {
-	offset := (page - 1) * 10
-	data, err := service.prouctData.SelectAllProduct(offset, 10)
-	if err != nil {
-		return nil, err
-	}
-	return data, nil
 }
 
 // SelectProductById implements product.ProductServiceInterface.

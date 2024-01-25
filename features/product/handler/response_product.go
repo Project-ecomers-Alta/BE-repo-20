@@ -5,22 +5,20 @@ import (
 )
 
 type ProductResponse struct {
-	ID            uint     `json:"id"`
-	UserId        uint     `json:"user_id"`
-	Name          string   `json:"name"`
-	Description   string   `json:"description"`
-	Quantity      uint     `json:"quantity"`
-	Price         uint     `json:"price"`
-	Category      string   `json:"category"`
-	User          UserCore `json:"user"`
-	ProductImages []ProductImageResponse
+	ID            uint                 `json:"id"`
+	UserId        uint                 `json:"user_id"`
+	Name          string               `json:"name"`
+	Description   string               `json:"description"`
+	Quantity      uint                 `json:"quantity"`
+	Price         uint                 `json:"price"`
+	Category      string               `json:"category"`
+	User          UserCore             `json:"user"`
+	DetailsImages []ProductImageDetail `json:"details_images"`
 }
 
-type ProductImageResponse struct {
-	ID        uint
-	ProductID uint
-	Url       string
-	PublicID  string
+type ProductImageDetail struct {
+	ProductID uint   `json:"product_id"`
+	Images    string `json:"images"`
 }
 
 type UserCore struct {
@@ -40,13 +38,14 @@ type UserCore struct {
 
 func CoreToResponse(p product.ProductCore) ProductResponse {
 	return ProductResponse{
-		ID:          p.ID,
-		UserId:      p.UserID,
-		Name:        p.Name,
-		Description: p.Description,
-		Category:    p.Category,
-		Quantity:    p.Quantity,
-		Price:       p.Price,
+		ID:            p.ID,
+		UserId:        p.UserID,
+		Name:          p.Name,
+		Description:   p.Description,
+		Category:      p.Category,
+		Quantity:      p.Quantity,
+		Price:         p.Price,
+		DetailsImages: ProductImageCoreToResponseDetails(p.ProductImages),
 		User: UserCore{
 			ID:          p.User.ID,
 			UserName:    p.User.UserName,
@@ -61,9 +60,9 @@ func CoreToResponse(p product.ProductCore) ProductResponse {
 			Tagline:     p.User.Tagline,
 			ShopImage:   p.User.ShopImage,
 		},
-		ProductImages: ProductImageCoreToResponse(p.ProductImages),
 	}
 }
+
 func CoreToResponseUpdate(p product.ProductCore) ProductResponse {
 	return ProductResponse{
 		ID:          p.ID,
@@ -84,14 +83,12 @@ func CoreToResponseList(p []product.ProductCore) []ProductResponse {
 	return results
 }
 
-func ProductImageCoreToResponse(p []product.ProductImageCore) []ProductImageResponse {
-	var results []ProductImageResponse
+func ProductImageCoreToResponseDetails(p []product.ProductImageCore) []ProductImageDetail {
+	var results []ProductImageDetail
 	for _, v := range p {
-		results = append(results, ProductImageResponse{
-			ID:        v.ID,
+		results = append(results, ProductImageDetail{
 			ProductID: v.ProductID,
-			Url:       v.Url,
-			PublicID:  v.PublicID,
+			Images:    v.Url,
 		})
 	}
 	return results

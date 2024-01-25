@@ -22,6 +22,19 @@ func NewProduct(db *gorm.DB, cloud uploads.CloudinaryInterface) product.ProductD
 	}
 }
 
+// SelectAllProduct implements product.ProductDataInterface.
+func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.ProductCore, error) {
+	var productGorm []Product
+	tx := repo.db.Offset(offset).Limit(limit).Preload("User").Preload("ProductImages").Find(&productGorm)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	produtCore := ModelToCoreList(productGorm)
+
+	return produtCore, nil
+}
+
 func (repo *productQuery) GetTotalImagesOfProduct(productId int) (uint, error) {
 	var productImg []ProductImage
 	var result uint
@@ -56,19 +69,6 @@ func (repo *productQuery) GetUserId(userId int) (uint, error) {
 	}
 
 	return user.ID, nil
-}
-
-// SelectAllProduct implements product.ProductDataInterface.
-func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.ProductCore, error) {
-	var productGorm []Product
-	tx := repo.db.Offset(offset).Limit(limit).Preload("User").Preload("ProductImages").Find(&productGorm)
-	if tx.Error != nil {
-		return nil, tx.Error
-	}
-
-	produtCore := ModelToCoreList(productGorm)
-
-	return produtCore, nil
 }
 
 // SelectProductById implements product.ProductDataInterface.
