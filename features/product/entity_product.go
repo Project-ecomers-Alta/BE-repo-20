@@ -31,6 +31,7 @@ type ProductDataInterface interface {
 	DeleteProductById(userId int, id int) error
 	SearchProductByQuery(query string, offset, limit int) ([]ProductCore, error)
 	CreateProductImage(file multipart.File, input ProductImageCore, nameFile string, id int) error
+	DeleteProductImageById(userId, productId, idImage int) error
 }
 
 type ProductServiceInterface interface {
@@ -41,4 +42,5 @@ type ProductServiceInterface interface {
 	DeleteProductById(userId int, id int) error
 	SearchProductByQuery(query string, offset, limit int) ([]ProductCore, error)
 	CreateProductImage(file multipart.File, input ProductImageCore, nameFile string, id int) error
+	DeleteProductImageById(userId, productId, idImage int) error
 }

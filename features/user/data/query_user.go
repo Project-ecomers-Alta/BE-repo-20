@@ -65,7 +65,7 @@ func (repo *userQuery) SelectUser(id int) (*user.UserCore, error) {
 // UpdateShop implements user.UserDataInterface.
 func (repo *userQuery) UpdateShop(id int, input user.UserCore, file multipart.File, nameFile string) error {
 	// foldering name at cloudinary
-	var folderName string = "img/items"
+	var folderName string = "img/users"
 
 	// get user shop image from db
 	imgGorm, _ := repo.GetUserShopImageById(id)
