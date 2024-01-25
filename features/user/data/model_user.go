@@ -55,7 +55,6 @@ func CoreToModelShop(input user.UserCore) User {
 		Subdistrict: input.Subdistrict,
 		Address:     input.Address,
 		ShopImage:   input.ShopImage,
-		Category:    input.Category,
 	}
 }
 
@@ -69,6 +68,5 @@ func (u User) ModelToCoreShop() user.UserCore {
 		Subdistrict: u.Subdistrict,
 		Address:     u.Address,
 		ShopImage:   u.ShopImage,
-		Category:    u.Category,
 	}
 }

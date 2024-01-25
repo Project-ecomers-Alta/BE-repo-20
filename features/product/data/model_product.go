@@ -50,7 +50,7 @@ func (u Product) ModelToCore() product.ProductCore {
 			Subdistrict: u.User.Subdistrict,
 			Tagline:     u.User.TagLine,
 			ShopImage:   u.User.ShopImage,
-			Category:    u.User.Category},
+		},
 		ProductImages: ProductImageGormToCore(u.ProductImages),
 	}
 }

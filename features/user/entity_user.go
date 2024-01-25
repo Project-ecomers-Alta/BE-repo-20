@@ -16,7 +16,6 @@ type UserCore struct {
 	Subdistrict string
 	Tagline     string
 	ShopImage   string
-	Category    string
 }
 
 type UserDataInterface interface {

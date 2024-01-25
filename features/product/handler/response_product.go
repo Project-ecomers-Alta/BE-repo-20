@@ -35,7 +35,7 @@ type UserCore struct {
 	City        string `json:"city"`
 	Subdistrict string `json:"subdistrict"`
 	Address     string `json:"address"`
-	Category    string `json:"category"`
+	ShopImage   string `json:"shop_image"`
 }
 
 func CoreToResponse(p product.ProductCore) ProductResponse {
@@ -59,7 +59,7 @@ func CoreToResponse(p product.ProductCore) ProductResponse {
 			City:        p.User.City,
 			Subdistrict: p.User.Subdistrict,
 			Tagline:     p.User.Tagline,
-			Category:    p.User.Category,
+			ShopImage:   p.User.ShopImage,
 		},
 		ProductImages: ProductImageCoreToResponse(p.ProductImages),
 	}
