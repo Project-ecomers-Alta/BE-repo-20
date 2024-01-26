@@ -5,6 +5,8 @@ import (
 	_dataAuth "BE-REPO-20/features/auth/data"
 	_handlerAuth "BE-REPO-20/features/auth/handler"
 	_serviceAuth "BE-REPO-20/features/auth/service"
+	"BE-REPO-20/features/midtrans/controller"
+	"BE-REPO-20/features/midtrans/service"
 
 	_dataAdmin "BE-REPO-20/features/admin/data"
 	_handlerAdmin "BE-REPO-20/features/admin/handler"
@@ -29,6 +31,7 @@ import (
 	"BE-REPO-20/utils/encrypts"
 	"BE-REPO-20/utils/uploads"
 
+	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -60,6 +63,12 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	orderData := _dataOrder.NewOrder(db)
 	orderService := _serviceOrder.NewOrder(orderData)
 	orderHandler := _handlerOrder.NewOrder(orderService)
+
+	validate := validator.New()
+	midtransService := service.NewMidtransServiceImpl(validate)
+	midTransHandler := controller.NewMidtransControllerHandler(midtransService)
+
+	e.POST("/midtrans/create", midTransHandler.CreateEcho)
 
 	// login
 	e.POST("/login", authHandler.Login)
