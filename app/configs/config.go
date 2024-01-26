@@ -13,6 +13,7 @@ var (
 	CLOUDINARY_KEY        string
 	CLOUDINARY_SECRET     string
 	CLOUDINARY_CLOUD_NAME string
+	MIDTRANS_SERVER_KEY   string
 )
 
 type AppConfig struct {
@@ -69,6 +70,10 @@ func ReadEnv() *AppConfig {
 		CLOUDINARY_CLOUD_NAME = val
 		isRead = false
 	}
+	if val, found := os.LookupEnv("MIDTRANS_SERVER_KEY"); found {
+		MIDTRANS_SERVER_KEY = val
+		isRead = false
+	}
 
 	if isRead {
 		viper.AddConfigPath(".")
@@ -91,6 +96,7 @@ func ReadEnv() *AppConfig {
 		CLOUDINARY_KEY = viper.Get("CLOUDINARY_KEY").(string)
 		CLOUDINARY_SECRET = viper.Get("CLOUDINARY_SECRET").(string)
 		CLOUDINARY_CLOUD_NAME = viper.Get("CLOUDINARY_CLOUD_NAME").(string)
+		MIDTRANS_SERVER_KEY = viper.Get("MIDTRANS_SERVER_KEY").(string)
 	}
 
 	return &app

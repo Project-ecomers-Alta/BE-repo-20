@@ -2,6 +2,7 @@ package data
 
 import (
 	_cart "BE-REPO-20/features/cart"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -14,6 +15,19 @@ func NewCart(db *gorm.DB) _cart.CartDataInterface {
 	return &cartQuery{
 		db: db,
 	}
+}
+
+func (repo *cartQuery) DeleteCarts(ids []uint) error {
+	tx := repo.db.Where("id IN ?", ids).Delete(&Cart{})
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	if tx.RowsAffected != int64(len(ids)) {
+		return errors.New("delete failed, not all rows affected")
+	}
+
+	return nil
 }
 
 func (repo *cartQuery) SelectAllCart(userId uint) ([]_cart.CartCore, error) {

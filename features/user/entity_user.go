@@ -3,19 +3,19 @@ package user
 import "mime/multipart"
 
 type UserCore struct {
-	ID          uint
-	UserName    string `validate:"required"`
-	ShopName    string
-	Email       string `validate:"required,email"`
-	PhoneNumber string
-	Domicile    string `validate:"required"`
-	Address     string
-	Image       string
-	Province    string
-	City        string
-	Subdistrict string
-	Tagline     string
-	ShopImage   string
+	ID          uint   `json:"id"`
+	UserName    string `json:"user_name" validate:"required"`
+	ShopName    string `json:"shop_name"`
+	Email       string `json:"email" validate:"required,email"`
+	PhoneNumber string `json:"phone_number"`
+	Domicile    string `json:"domicile" validate:"required"`
+	Address     string `json:"address"`
+	Image       string `json:"image"`
+	Province    string `json:"province"`
+	City        string `json:"city"`
+	Subdistrict string `json:"subdistrict"`
+	Tagline     string `json:"tagline"`
+	ShopImage   string `json:"shop_image"`
 }
 
 type UserDataInterface interface {
