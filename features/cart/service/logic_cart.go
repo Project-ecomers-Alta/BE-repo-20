@@ -14,6 +14,11 @@ func NewCart(repo _cart.CartDataInterface) _cart.CartServiceInterface {
 	}
 }
 
+func (service *cartService) DeleteCarts(ids []uint) error {
+	err := service.cartData.DeleteCarts(ids)
+	return err
+}
+
 func (service *cartService) CreateCart(userId int, productId uint) error {
 	err := service.cartData.CreateCart(userId, productId)
 	return err
