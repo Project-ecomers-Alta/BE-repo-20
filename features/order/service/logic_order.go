@@ -27,3 +27,12 @@ func (service *orderService) PostOrder(userId uint, input _order.OrderCore) (*_o
 	// midtransResponse := _midtransService.MidtransService.CreateEcho()
 	return res, nil
 }
+
+// GetOrder implements order.OrderServiceInterface.
+func (service *orderService) GetOrders(userId uint) ([]_order.OrderCore, error) {
+	results, err := service.orderData.GetOrders(userId)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
