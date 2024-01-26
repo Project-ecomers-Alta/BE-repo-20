@@ -2,6 +2,7 @@ package service
 
 import (
 	_order "BE-REPO-20/features/order"
+	// _midtransService "BE-REPO-20/features/midtrans/service"
 )
 
 type orderService struct {
@@ -22,5 +23,7 @@ func (service *orderService) PostOrder(userId uint, input _order.OrderCore) (*_o
 		return nil, err
 	}
 
+	//midtrans
+	// midtransResponse := _midtransService.MidtransService.CreateEcho()
 	return res, nil
 }

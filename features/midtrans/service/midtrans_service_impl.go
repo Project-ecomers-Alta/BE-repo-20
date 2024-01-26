@@ -3,7 +3,6 @@ package service
 import (
 	"BE-REPO-20/features/midtrans/helper"
 	"BE-REPO-20/features/midtrans/web"
-	"os"
 	"strconv"
 
 	"github.com/go-playground/validator"
@@ -27,10 +26,11 @@ func (service *MidtransServiceImpl) CreateEcho(c echo.Context, request web.Midtr
 	if err != nil {
 		helper.PanicIfError(err)
 	}
-
+	midtranServerKey := "SB-Mid-server-XGdfn0Un08oUioFXuEZuTkb-"
 	// request midtrans
 	var snapClient = snap.Client{}
-	snapClient.New(os.Getenv("MIDTRANS_SERVER_KEY"), midtrans.Sandbox)
+	// snapClient.New(os.Getenv("MIDTRANS_SERVER_KEY"), midtrans.Sandbox)
+	snapClient.New(midtranServerKey, midtrans.Sandbox)
 
 	// user id
 	user_id := strconv.Itoa(request.UserId)
@@ -48,7 +48,7 @@ func (service *MidtransServiceImpl) CreateEcho(c echo.Context, request web.Midtr
 
 	req := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
-			OrderID:  "MID-User-" + user_id + "-" + request.ItemID,
+			OrderID:  "MID-User-" + user_id + "-" + request.OrderID,
 			GrossAmt: request.Amount,
 		},
 		CreditCard: &snap.CreditCardDetails{
@@ -65,7 +65,7 @@ func (service *MidtransServiceImpl) CreateEcho(c echo.Context, request web.Midtr
 		EnabledPayments: snap.AllSnapPaymentType,
 		Items: &[]midtrans.ItemDetails{
 			{
-				ID:    "Property-" + request.ItemID,
+				ID:    "Property-" + request.OrderID,
 				Qty:   1,
 				Price: request.Amount,
 				Name:  request.ItemName,

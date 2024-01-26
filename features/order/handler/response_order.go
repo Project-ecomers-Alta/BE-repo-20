@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"BE-REPO-20/features/midtrans/web"
 	"BE-REPO-20/features/order"
 	"BE-REPO-20/features/user"
+	"strconv"
 )
 
 type OrderResponse struct {
@@ -69,4 +71,21 @@ func ItemOrderResponseToList(o []order.ItemOrderCore) []ItemOrderResponse {
 		})
 	}
 	return results
+}
+
+func OrderToMidtrans(o OrderResponse) web.MidtransRequest {
+	return web.MidtransRequest{
+		UserId:   int(o.User.ID),
+		Amount:   int64(TotalAmount(o)),
+		OrderID:  strconv.Itoa(int(o.Id)),
+		ItemName: "Kaos",
+	}
+}
+
+func TotalAmount(o OrderResponse) int {
+	var amount int
+	for _, v := range o.ItemOrders {
+		amount += int(v.SubTotal)
+	}
+	return amount
 }

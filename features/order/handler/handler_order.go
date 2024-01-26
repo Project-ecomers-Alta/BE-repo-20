@@ -4,6 +4,7 @@ import (
 	"BE-REPO-20/app/middlewares"
 	"BE-REPO-20/features/order"
 	"BE-REPO-20/utils/responses"
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -39,5 +40,12 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("Error order. "+err.Error(), nil))
 	}
 	orderResponse := CoreToResponse(*results)
+	// var request web.MidtransRequest
+	midtransReq := OrderToMidtrans(orderResponse)
+	fmt.Println(midtransReq)
+
+	// midtrans
+	// midtransResponse := _midtransService.MidtransService.CreateEcho(c, midtransReq)
+
 	return c.JSON(http.StatusOK, responses.WebResponse("Success order.", orderResponse))
 }

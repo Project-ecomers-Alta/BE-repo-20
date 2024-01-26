@@ -68,6 +68,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	midtransService := service.NewMidtransServiceImpl(validate)
 	midTransHandler := controller.NewMidtransControllerHandler(midtransService)
 
+	//midtrans
 	e.POST("/midtrans/create", midTransHandler.CreateEcho)
 
 	// login
