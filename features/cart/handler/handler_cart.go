@@ -20,6 +20,20 @@ func NewCart(service _cart.CartServiceInterface) *Carthandler {
 	}
 }
 
+func (handler *Carthandler) SelectAllCart(c echo.Context) error {
+	idJWT := middlewares.ExtractTokenUserId(c)
+
+	userID := uint(idJWT)
+
+	carts, err := handler.cartService.SelectAllCart(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+err.Error(), nil))
+	}
+
+	cartResponse := CoreToResponseList(carts)
+	return c.JSON(http.StatusOK, responses.WebResponse("success read cart.", cartResponse))
+}
+
 func (handler *Carthandler) DeleteCarts(c echo.Context) error {
 	var request struct {
 		Ids []uint `json:"ids"`
@@ -37,20 +51,6 @@ func (handler *Carthandler) DeleteCarts(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]any{
 		"message": "success",
 	})
-}
-
-func (handler *Carthandler) SelectAllCart(c echo.Context) error {
-	idJWT := middlewares.ExtractTokenUserId(c)
-
-	userID := uint(idJWT)
-
-	carts, err := handler.cartService.SelectAllCart(userID)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+err.Error(), nil))
-	}
-
-	cartResponse := CoreToResponseList(carts)
-	return c.JSON(http.StatusOK, responses.WebResponse("success read cart.", cartResponse))
 }
 
 func (handler *Carthandler) CreateCart(c echo.Context) error {
