@@ -56,7 +56,7 @@ func OrderCoreToModel(o order.OrderCore) Order {
 		CreditCard: o.CreditCard,
 		Status:     o.Status,
 		Invoice:    o.Invoice,
-		Total:      o.Total,
+		// Total:      o.Total,
 		VirtualAcc: o.VirtualAcc,
 		// User:       _userData.User{},
 		// ItemOrders: ItemOrder{},
@@ -105,4 +105,12 @@ func ItemOrderGormToCore(itemOrder []ItemOrder) []order.ItemOrderCore {
 		})
 	}
 	return results
+}
+
+func TotalAmount(o []data.Cart) int {
+	var amount int
+	for _, v := range o {
+		amount += int(v.Quantity * int(v.Product.Price))
+	}
+	return amount
 }

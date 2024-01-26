@@ -7,6 +7,11 @@ import (
 	"fmt"
 	"net/http"
 
+	// _midtransController "BE-REPO-20/features/midtrans/controller"
+	_midtransService "BE-REPO-20/features/midtrans/service"
+	"BE-REPO-20/features/midtrans/web"
+
+	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 )
 
@@ -40,12 +45,20 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, responses.WebResponse("Error order. "+err.Error(), nil))
 	}
 	orderResponse := CoreToResponse(*results)
-	// var request web.MidtransRequest
+
 	midtransReq := OrderToMidtrans(orderResponse)
+
 	fmt.Println(midtransReq)
 
 	// midtrans
-	// midtransResponse := _midtransService.MidtransService.CreateEcho(c, midtransReq)
+	validate := validator.New()
+	midtransService := _midtransService.NewMidtransServiceImpl(validate)
+	midtransResponse := _midtransService.MidtransService.CreateEcho(midtransService, c, midtransReq)
 
-	return c.JSON(http.StatusOK, responses.WebResponse("Success order.", orderResponse))
+	webResponse := web.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   midtransResponse,
+	}
+	return c.JSON(http.StatusOK, responses.WebResponse("Success order.", webResponse))
 }

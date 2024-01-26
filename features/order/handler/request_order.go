@@ -10,8 +10,8 @@ type OrderRequest struct {
 	CreditCard uint   `json:"credit_card"`
 	Status     string `json:"status"`
 	Invoice    string `json:"invoice"`
-	Total      uint   `json:"total"`
-	VirtualAcc uint   `json:"virtual_acc"`
+	// Total      uint   `json:"total"`
+	VirtualAcc uint `json:"virtual_acc"`
 }
 
 func OrderRequestToCore(input OrderRequest) order.OrderCore {
@@ -21,7 +21,7 @@ func OrderRequestToCore(input OrderRequest) order.OrderCore {
 		CreditCard: input.CreditCard,
 		Status:     input.Status,
 		Invoice:    input.Invoice,
-		Total:      input.Total,
+		// Total:      input.Total,
 		VirtualAcc: input.VirtualAcc,
 		// User:       user.UserCore{},
 		// ItemOrders: []order.ItemOrderCore{},

@@ -28,6 +28,7 @@ type ItemOrderCore struct {
 
 type OrderDataInterface interface {
 	PostOrder(userId uint, input OrderCore) (*OrderCore, error)
+	GetOrder(userId uint) (*OrderCore, error)
 }
 
 type OrderServiceInterface interface {

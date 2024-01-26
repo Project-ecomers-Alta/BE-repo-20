@@ -32,7 +32,7 @@ func (repo *orderQuery) GetCart(userId uint) ([]data.Cart, error) {
 
 func (repo *orderQuery) GetOrder(userId uint) (*order.OrderCore, error) {
 	var orderGorm Order
-	tx := repo.db.Preload("ItemOrders").Preload("User").First(&orderGorm, "user_id = ?", userId)
+	tx := repo.db.Preload("ItemOrders").Preload("User").First(&orderGorm, "id = ?", userId)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -46,22 +46,31 @@ func (repo *orderQuery) GetOrder(userId uint) (*order.OrderCore, error) {
 
 // PostOrder implements order.OrderDataInterface.
 func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.OrderCore, error) {
+	var orderGorm Order
+	var itemOrders []ItemOrder
 	// get cart
 	carts, errCart := repo.GetCart(uint(userId))
 	if errCart != nil {
 		return nil, errCart
 	}
+	var amount int
 
+	for i := 0; i < len(carts); i++ {
+		amount += carts[i].Quantity * int(carts[i].Product.Price)
+	}
+
+	orderGorm.Total = uint(amount)
 	// repo.db.Transaction(
 	repo.db.Transaction(func(tx *gorm.DB) error {
 		// Create Data Order
-		orderGorm := OrderCoreToModel(input)
+		orderGorm = OrderCoreToModel(input)
+		orderGorm.Total = uint(amount)
 		if errOrder := tx.Create(&orderGorm).Error; errOrder != nil {
 			return errOrder
 		}
 
 		// // Create Data ItemOrder
-		itemOrders := CartToItemOrderList(carts)
+		itemOrders = CartToItemOrderList(carts)
 		for i := range itemOrders {
 			itemOrders[i].OrderID = orderGorm.ID
 		}
@@ -77,7 +86,7 @@ func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.Or
 	})
 
 	// get order id
-	orders, errOrder := repo.GetOrder(userId)
+	orders, errOrder := repo.GetOrder(orderGorm.ID)
 	if errOrder != nil {
 		return nil, errOrder
 	}

@@ -4,7 +4,6 @@ import (
 	"BE-REPO-20/features/midtrans/web"
 	"BE-REPO-20/features/order"
 	"BE-REPO-20/features/user"
-	"strconv"
 )
 
 type OrderResponse struct {
@@ -75,10 +74,18 @@ func ItemOrderResponseToList(o []order.ItemOrderCore) []ItemOrderResponse {
 
 func OrderToMidtrans(o OrderResponse) web.MidtransRequest {
 	return web.MidtransRequest{
-		UserId:   int(o.User.ID),
-		Amount:   int64(TotalAmount(o)),
-		OrderID:  strconv.Itoa(int(o.Id)),
-		ItemName: "Kaos",
+		UserId:      int(o.User.ID),
+		Amount:      int64(TotalAmount(o)),
+		OrderID:     o.Id,
+		ItemName:    "Kaos",
+		FName:       o.User.UserName,
+		LName:       o.User.ShopName,
+		Phone:       o.User.PhoneNumber,
+		Address:     o.Address,
+		City:        o.User.City,
+		Postcode:    "13660",
+		CountryCode: "IDN",
+		Email:       o.User.Email,
 	}
 }
 
