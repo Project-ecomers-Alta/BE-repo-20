@@ -107,4 +107,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// order
 	e.POST("/order", orderHandler.CreateOrder, middlewares.JWTMiddleware())
+	e.GET("/order", orderHandler.GetOrders, middlewares.JWTMiddleware())
 }

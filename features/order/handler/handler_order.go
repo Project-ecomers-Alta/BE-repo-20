@@ -62,3 +62,17 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, responses.WebResponse("Success order.", webResponse))
 }
+
+func (handler *OrderHandler) GetOrders(c echo.Context) error {
+	idJWT := middlewares.ExtractTokenUserId(c)
+	if idJWT == 0 {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("unauthorized or jwt expired", nil))
+	}
+
+	results, err := handler.orderService.GetOrders(uint(idJWT))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("Error order. "+err.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, responses.WebResponse("Success get order.", results))
+}

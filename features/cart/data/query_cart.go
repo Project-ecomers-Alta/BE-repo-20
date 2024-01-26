@@ -32,7 +32,8 @@ func (repo *cartQuery) DeleteCarts(ids []uint) error {
 
 func (repo *cartQuery) SelectAllCart(userId uint) ([]_cart.CartCore, error) {
 	var cartData []Cart
-	tx := repo.db.Where("user_id = ?", userId).Find(&cartData)
+	// tx := repo.db.Where("user_id = ?", userId).Find(&cartData)
+	tx := repo.db.Preload("Product").Preload("User").Find(&cartData, "user_id = ?", userId)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -44,6 +45,7 @@ func (repo *cartQuery) SelectAllCart(userId uint) ([]_cart.CartCore, error) {
 			ProductID: uint(value.ProductID),
 			UserID:    uint(value.UserID),
 			Quantity:  value.Quantity,
+			// Product: []product.ProductCore,
 		}
 		cartDataCore = append(cartDataCore, cartCore)
 	}

@@ -44,6 +44,23 @@ func (repo *orderQuery) GetOrder(userId uint) (*order.OrderCore, error) {
 	return &orderCore, nil
 }
 
+func (repo *orderQuery) GetOrders(userId uint) ([]order.OrderCore, error) {
+	var orderGorm []Order
+	tx := repo.db.Preload("ItemOrders").Preload("User").Find(&orderGorm, "user_id = ?", userId)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return nil, errors.New("find order failed, row affected = 0")
+	}
+	var orderCores []order.OrderCore
+	for _, v := range orderGorm {
+		orderCores = append(orderCores, ModelToCore(v))
+	}
+
+	return orderCores, nil
+}
+
 // PostOrder implements order.OrderDataInterface.
 func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.OrderCore, error) {
 	var orderGorm Order
