@@ -17,6 +17,7 @@ type ProductResponse struct {
 }
 
 type ProductImageDetail struct {
+	ID        uint   `json:"id"`
 	ProductID uint   `json:"product_id"`
 	Images    string `json:"images"`
 }
@@ -87,6 +88,7 @@ func ProductImageCoreToResponseDetails(p []product.ProductImageCore) []ProductIm
 	var results []ProductImageDetail
 	for _, v := range p {
 		results = append(results, ProductImageDetail{
+			ID:        v.ID,
 			ProductID: v.ProductID,
 			Images:    v.Url,
 		})
