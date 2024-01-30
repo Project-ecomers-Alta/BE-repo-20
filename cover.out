@@ -1,0 +1,25 @@
+mode: set
+BE-REPO-20/features/auth/service/logic_user.go:18.98,24.2 1 1
+BE-REPO-20/features/auth/service/logic_user.go:26.106,28.24 2 1
+BE-REPO-20/features/auth/service/logic_user.go:28.24,30.3 1 0
+BE-REPO-20/features/auth/service/logic_user.go:32.2,32.26 1 1
+BE-REPO-20/features/auth/service/logic_user.go:32.26,34.21 2 1
+BE-REPO-20/features/auth/service/logic_user.go:34.21,36.4 1 0
+BE-REPO-20/features/auth/service/logic_user.go:37.3,37.30 1 1
+BE-REPO-20/features/auth/service/logic_user.go:40.2,41.34 2 1
+BE-REPO-20/features/auth/service/logic_user.go:44.113,45.35 1 1
+BE-REPO-20/features/auth/service/logic_user.go:45.35,47.3 1 0
+BE-REPO-20/features/auth/service/logic_user.go:49.2,50.16 2 1
+BE-REPO-20/features/auth/service/logic_user.go:50.16,52.3 1 1
+BE-REPO-20/features/auth/service/logic_user.go:53.2,54.14 2 1
+BE-REPO-20/features/auth/service/logic_user.go:54.14,56.3 1 1
+BE-REPO-20/features/auth/service/logic_user.go:58.2,59.19 2 1
+BE-REPO-20/features/auth/service/logic_user.go:59.19,61.3 1 0
+BE-REPO-20/features/auth/service/logic_user.go:62.2,62.25 1 1
+BE-REPO-20/features/auth/service/logic_user.go:65.89,67.24 2 1
+BE-REPO-20/features/auth/service/logic_user.go:67.24,69.3 1 0
+BE-REPO-20/features/auth/service/logic_user.go:71.2,71.26 1 1
+BE-REPO-20/features/auth/service/logic_user.go:71.26,73.21 2 1
+BE-REPO-20/features/auth/service/logic_user.go:73.21,75.4 1 1
+BE-REPO-20/features/auth/service/logic_user.go:76.3,76.30 1 1
+BE-REPO-20/features/auth/service/logic_user.go:79.2,80.12 2 1

@@ -32,7 +32,7 @@ func (service *authService) Register(input auth.AuthCore) (data *auth.AuthCore, 
 	if input.Password != "" {
 		hashedPass, errHash := service.hashService.HashPassword(input.Password)
 		if errHash != nil {
-			return nil, "", errors.New("Error hashing password")
+			return nil, "", errors.New("rror hashing password")
 		}
 		input.Password = hashedPass
 	}
