@@ -34,6 +34,25 @@ func (handler *Carthandler) SelectAllCart(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse("success read cart.", cartResponse))
 }
 
+func (handler *Carthandler) DeleteCarts(c echo.Context) error {
+	var request struct {
+		Ids []uint `json:"ids"`
+	}
+
+	if err := c.Bind(&request); err != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error parsing request."+err.Error(), nil))
+	}
+
+	err := handler.cartService.DeleteCarts(request.Ids)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error delete data."+err.Error(), nil))
+	}
+
+	return c.JSON(http.StatusOK, map[string]any{
+		"message": "success",
+	})
+}
+
 func (handler *Carthandler) CreateCart(c echo.Context) error {
 	idJWT := middlewares.ExtractTokenUserId(c)
 	productID := getProductIDFromParams(c)

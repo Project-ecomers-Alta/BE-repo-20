@@ -17,9 +17,11 @@ type CartCore struct {
 type CartDataInterface interface {
 	CreateCart(userId int, productId uint) error
 	SelectAllCart(userId uint) ([]CartCore, error)
+	DeleteCarts(ids []uint) error
 }
 
 type CartServiceInterface interface {
 	CreateCart(userId int, productId uint) error
 	SelectAllCart(userId uint) ([]CartCore, error)
+	DeleteCarts(ids []uint) error
 }
