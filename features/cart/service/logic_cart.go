@@ -24,7 +24,7 @@ func (service *cartService) DeleteCarts(ids []uint) error {
 	return err
 }
 
-func (service *cartService) CreateCart(userId int, productId uint) error {
-	err := service.cartData.CreateCart(userId, productId)
+func (service *cartService) CreateCart(input _cart.CartCore) error {
+	err := service.cartData.CreateCart(input)
 	return err
 }

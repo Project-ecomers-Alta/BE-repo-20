@@ -55,8 +55,20 @@ func (handler *Carthandler) DeleteCarts(c echo.Context) error {
 
 func (handler *Carthandler) CreateCart(c echo.Context) error {
 	idJWT := middlewares.ExtractTokenUserId(c)
-	productID := getProductIDFromParams(c)
-	err := handler.cartService.CreateCart(idJWT, productID)
+
+	newCart := CartRequest{}
+	errBind := c.Bind(&newCart)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid."+errBind.Error(), nil))
+	}
+
+	cartCore := _cart.CartCore{
+		ProductID: newCart.ProductId,
+		UserID:    uint(idJWT),
+		Quantity:  newCart.Quantity,
+	}
+
+	err := handler.cartService.CreateCart(cartCore)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error create cart."+err.Error(), nil))
 	}
