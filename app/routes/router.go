@@ -29,6 +29,7 @@ import (
 	_serviceOrder "BE-REPO-20/features/order/service"
 
 	"BE-REPO-20/utils/encrypts"
+	"BE-REPO-20/utils/midtrans"
 	"BE-REPO-20/utils/uploads"
 
 	"github.com/go-playground/validator"
@@ -39,6 +40,7 @@ import (
 func InitRouter(db *gorm.DB, e *echo.Echo) {
 	hashService := encrypts.NewHashService()
 	uploadService := uploads.NewCloudService()
+	midtrans := midtrans.New()
 
 	authData := _dataAuth.NewAuth(db)
 	authService := _serviceAuth.NewAuth(authData, hashService)
@@ -60,7 +62,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	cartService := _serviceCart.NewCart(cartData)
 	carthandler := _handlerCart.NewCart(cartService)
 
-	orderData := _dataOrder.NewOrder(db)
+	orderData := _dataOrder.NewOrder(db, midtrans)
 	orderService := _serviceOrder.NewOrder(orderData)
 	orderHandler := _handlerOrder.NewOrder(orderService)
 
@@ -107,5 +109,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 
 	// order
 	e.POST("/order", orderHandler.CreateOrder, middlewares.JWTMiddleware())
+	e.POST("/orders2", orderHandler.GetOrders2, middlewares.JWTMiddleware())
 	e.GET("/order", orderHandler.GetOrders, middlewares.JWTMiddleware())
+	e.POST("/payment/notification", orderHandler.WebhoocksNotification)
 }
