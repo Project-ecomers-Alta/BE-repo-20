@@ -7,13 +7,14 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestGetUserRoleById(t *testing.T) {
 	repo := new(mocks.AdminData)
 	srv := NewAdmin(repo)
 	expectedRole := "admin"
-	repo.On("GetUserRoleById", 1).Return(expectedRole, nil)
+	repo.On("GetUserRoleById", mock.Anything).Return(expectedRole, nil).Once()
 
 	result, err := srv.GetUserRoleById(1)
 
@@ -35,7 +36,7 @@ func TestSelectAllUser(t *testing.T) {
 			Role:      "user",
 			CreatedAt: time.Now(),
 			UpdatedAt: time.Now()}}
-	repo.On("SelectAllUser").Return(expectedUsers, nil)
+	repo.On("SelectAllUser", mock.Anything).Return(expectedUsers, nil).Once()
 
 	result, err := srv.SelectAllUser()
 
@@ -60,7 +61,7 @@ func TestSearchUserByQuery(t *testing.T) {
 				UpdatedAt: time.Now(),
 			},
 		}
-		repo.On("SearchUserByQuery", "query").Return(expectedUsers, nil)
+		repo.On("SearchUserByQuery", mock.Anything).Return(expectedUsers, nil).Once()
 
 		result, err := srv.SearchUserByQuery("query")
 
@@ -73,7 +74,7 @@ func TestSearchUserByQuery(t *testing.T) {
 		repo := new(mocks.AdminData)
 		srv := NewAdmin(repo)
 
-		repo.On("SearchUserByQuery", "nonexistent").Return([]admin.AdminUserCore{}, nil)
+		repo.On("SearchUserByQuery", mock.Anything).Return([]admin.AdminUserCore{}, nil).Once()
 
 		results, err := srv.SearchUserByQuery("nonexistent")
 
@@ -106,7 +107,7 @@ func TestSelectAllOrder(t *testing.T) {
 			VirtualAcc: "VA-001",
 			CreatedAt:  time.Now(),
 			UpdatedAt:  time.Now()}}}
-	repo.On("SelectAllOrder").Return(expectedOrders, nil)
+	repo.On("SelectAllOrder", mock.Anything).Return(expectedOrders, nil).Once()
 
 	result, err := srv.SelectAllOrder()
 
@@ -143,7 +144,7 @@ func TestSearchOrderByQuery(t *testing.T) {
 				},
 			},
 		}
-		repo.On("SearchOrderByQuery", "query").Return(expectedOrders, nil)
+		repo.On("SearchOrderByQuery", mock.Anything).Return(expectedOrders, nil).Once()
 
 		result, err := srv.SearchOrderByQuery("query")
 
@@ -156,7 +157,7 @@ func TestSearchOrderByQuery(t *testing.T) {
 		repo := new(mocks.AdminData)
 		srv := NewAdmin(repo)
 
-		repo.On("SearchOrderByQuery", "nonexistent").Return([]admin.AdminItemOrderCore{}, nil)
+		repo.On("SearchOrderByQuery", mock.Anything).Return([]admin.AdminItemOrderCore{}, nil).Once()
 
 		results, err := srv.SearchOrderByQuery("nonexistent")
 

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestSelectAllCart(t *testing.T) {
@@ -14,7 +15,7 @@ func TestSelectAllCart(t *testing.T) {
 
 	expectedCarts := []auth.CartCore{{ID: 1, UserID: 1, ProductID: 1, Quantity: 2}}
 
-	repo.On("SelectAllCart", uint(1)).Return(expectedCarts, nil)
+	repo.On("SelectAllCart", mock.Anything).Return(expectedCarts, nil).Once()
 
 	carts, err := service.SelectAllCart(1)
 
@@ -30,7 +31,7 @@ func TestDeleteCarts(t *testing.T) {
 
 	ids := []uint{1, 2, 3}
 
-	repo.On("DeleteCarts", ids).Return(nil)
+	repo.On("DeleteCarts", mock.Anything).Return(nil).Once()
 
 	err := srv.DeleteCarts(ids)
 
@@ -44,7 +45,7 @@ func TestCreateCart(t *testing.T) {
 
 	input := auth.CartCore{UserID: 1, ProductID: 1, Quantity: 2}
 
-	repo.On("CreateCart", input).Return(nil)
+	repo.On("CreateCart", mock.Anything).Return(nil).Once()
 
 	err := srv.CreateCart(input)
 

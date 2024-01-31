@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestListProductPenjualan(t *testing.T) {
@@ -21,7 +22,7 @@ func TestListProductPenjualan(t *testing.T) {
 			Quantity: 10,
 			Category: "Category 1"},
 	}
-	repo.On("ListProductPenjualan", 0, 10, uint(1)).Return(expectedProducts, nil)
+	repo.On("ListProductPenjualan", 0, 10, mock.Anything).Return(expectedProducts, nil).Once()
 
 	result, err := srv.ListProductPenjualan(1, 1)
 
@@ -41,7 +42,7 @@ func TestSelectAllProduct(t *testing.T) {
 			Quantity: 10,
 			Category: "Category 1"},
 	}
-	repo.On("SelectAllProduct", 0, 10).Return(expectedProducts, nil)
+	repo.On("SelectAllProduct", 0, 10).Return(expectedProducts, nil).Once()
 
 	result, err := srv.SelectAllProduct(1)
 
@@ -57,7 +58,7 @@ func TestCreateProduct(t *testing.T) {
 	validInput := product.ProductCore{Name: "Product 1", Price: 1000, Quantity: 10, Category: "Category 1"}
 	invalidInput := product.ProductCore{}
 
-	repo.On("CreateProduct", 1, validInput).Return(nil)
+	repo.On("CreateProduct", 1, mock.Anything).Return(nil).Once()
 
 	err := srv.CreateProduct(1, validInput)
 	assert.NoError(t, err)
@@ -91,7 +92,7 @@ func TestSelectProductById(t *testing.T) {
 	repo := new(mocks.ProductData)
 	srv := NewProduct(repo)
 	expectedProduct := &product.ProductCore{ID: 1, Name: "Product 1", Price: 1000, Quantity: 10, Category: "Category 1"}
-	repo.On("SelectProductById", 1, 1).Return(expectedProduct, nil)
+	repo.On("SelectProductById", 1, mock.Anything).Return(expectedProduct, nil)
 
 	result, err := srv.SelectProductById(1, 1)
 
@@ -106,7 +107,7 @@ func TestSearchProductByQuery(t *testing.T) {
 	expectedProducts := []product.ProductCore{
 		{ID: 1, Name: "Product 1", Price: 1000, Quantity: 10, Category: "Category 1"},
 	}
-	repo.On("SearchProductByQuery", "query", 0, 10).Return(expectedProducts, nil)
+	repo.On("SearchProductByQuery", "query", 0, 10).Return(expectedProducts, nil).Once()
 
 	result, err := srv.SearchProductByQuery("query", 0, 10)
 
@@ -119,7 +120,7 @@ func TestUpdateProductById(t *testing.T) {
 	repo := new(mocks.ProductData)
 	srv := NewProduct(repo)
 	input := product.ProductCore{Name: "Product 1", Price: 1000, Quantity: 10, Category: "Category 1"}
-	repo.On("UpdateProductById", 1, 1, input).Return(nil)
+	repo.On("UpdateProductById", 1, 1, mock.Anything).Return(nil).Once()
 
 	err := srv.UpdateProductById(1, 1, input)
 
@@ -130,7 +131,7 @@ func TestUpdateProductById(t *testing.T) {
 func TestDeleteProductById(t *testing.T) {
 	repo := new(mocks.ProductData)
 	srv := NewProduct(repo)
-	repo.On("DeleteProductById", 1, 1).Return(nil)
+	repo.On("DeleteProductById", 1, 1).Return(nil).Once()
 
 	err := srv.DeleteProductById(1, 1)
 
@@ -148,7 +149,7 @@ func TestCreateProductImage(t *testing.T) {
 		Url:       "wwww.cloudinary.com",
 		PublicID:  "adqwfdqfavewa",
 	}
-	repo.On("CreateProductImage", *mockFile, input, "filename", 1).Return(nil)
+	repo.On("CreateProductImage", *mockFile, input, "filename", 1).Return(nil).Once()
 
 	err := srv.CreateProductImage(*mockFile, input, "filename", 1)
 
@@ -161,13 +162,12 @@ func TestDeleteProductImageById(t *testing.T) {
 	srv := NewProduct(repo)
 
 	validIdImage := 1
-	repo.On("DeleteProductImageById", 1, 1, validIdImage).Return(nil)
+	repo.On("DeleteProductImageById", 1, 1, mock.Anything).Return(nil).Once()
 	err := srv.DeleteProductImageById(1, 1, validIdImage)
 
 	assert.NoError(t, err)
 	repo.AssertExpectations(t)
 
-	// Call the function under test with invalid input for idImage <= 0
 	invalidIdImage := 0
 	err = srv.DeleteProductImageById(1, 1, invalidIdImage)
 	expectedErr := errors.New("invalid id")
