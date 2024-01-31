@@ -2,6 +2,7 @@ package handler
 
 import (
 	"BE-REPO-20/features/order"
+	"strconv"
 )
 
 type OrderRequest struct {
@@ -16,7 +17,7 @@ type OrderRequest struct {
 }
 
 type WebhoocksRequest struct {
-	OrderID           uint   `json:"order_id"`
+	OrderID           string `json:"order_id"`
 	TransactionStatus string `json:"transaction_status"`
 }
 
@@ -51,8 +52,9 @@ func RequestToCoreOrder(input OrderRequest) order.OrderCore {
 }
 
 func WebhoocksRequestToCore(input WebhoocksRequest) order.OrderCore {
+	orderId, _ := strconv.Atoi(input.OrderID)
 	return order.OrderCore{
-		Id:     input.OrderID,
+		Id:     uint(orderId),
 		Status: input.TransactionStatus,
 	}
 }
