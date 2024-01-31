@@ -8,21 +8,21 @@
 https://app.swaggerhub.com/apis/DWIMIRANDAA/E-CommerceApp/1.0.0#/
 
 ### Autentikasi
-<img width="500" alt="auth" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/9f5532a0-d6ef-4249-b8f3-428fe5b49be2">
+<img width="700" alt="auth" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/9f5532a0-d6ef-4249-b8f3-428fe5b49be2">
 
 ### Admin
-<img width="500" alt="admin" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/2e4c1aea-e165-42a7-a304-dedd1f08bc64">
+<img width="700" alt="admin" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/2e4c1aea-e165-42a7-a304-dedd1f08bc64">
 
 ### User
-<img width="500" alt="user" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/aac468c4-d7d6-478c-a2da-1fecf4cf4255">
+<img width="700" alt="user" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/aac468c4-d7d6-478c-a2da-1fecf4cf4255">
 
 ### Product
-<img width="500" alt="product" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/d587969e-b8ac-4bae-821d-76bbd0b9d577">
-<img width="500" alt="product" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/69c5c03b-8376-4d11-8f78-449e9b4bd53f">
+<img width="700" alt="product" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/d587969e-b8ac-4bae-821d-76bbd0b9d577">
+<img width="700" alt="product" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/69c5c03b-8376-4d11-8f78-449e9b4bd53f">
 
 ### Cart, Order
-<img width="500" alt="cart" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/67d7c967-1e9a-4745-ba1f-2c0feaa8cad4">
-<img width="500" alt="order" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/d4d12bd1-3a1e-4344-8b51-639363fe368a">
+<img width="700" alt="cart" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/67d7c967-1e9a-4745-ba1f-2c0feaa8cad4">
+<img width="700" alt="order" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/d4d12bd1-3a1e-4344-8b51-639363fe368a">
 
 
 
