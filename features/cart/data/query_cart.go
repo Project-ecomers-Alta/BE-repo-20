@@ -74,25 +74,28 @@ func (repo *cartQuery) DeleteCarts(ids []uint) error {
 	return nil
 }
 
-func (repo *cartQuery) CreateCart(userId int, productId uint) error {
+func (repo *cartQuery) CreateCart(input _cart.CartCore) error {
 	var existingCart Cart
-	result := repo.db.Where(&Cart{UserID: userId, ProductID: int(productId)}).First(&existingCart)
+	result := repo.db.Where(&Cart{UserID: int(input.UserID), ProductID: int(input.ProductID)}).First(&existingCart)
 
 	if result.Error == nil {
-		existingCart.Quantity++
+		existingCart.Quantity += 1
 		result = repo.db.Save(&existingCart)
 	} else {
-		newCart := Cart{
-			UserID:    userId,
-			ProductID: int(productId),
+		cartInput := Cart{
+			UserID:    int(input.UserID),
+			ProductID: int(input.ProductID),
 			Quantity:  1,
 		}
-		result = repo.db.Create(&newCart)
+		result = repo.db.Create(&cartInput)
 	}
 
 	if result.Error != nil {
 		return result.Error
 	}
 
+	if result.RowsAffected == 0 {
+		return errors.New("insert failed, row affected = 0")
+	}
 	return nil
 }

@@ -101,7 +101,7 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	e.GET("product-penjualan", productHandler.ListProductPenjualan, middlewares.JWTMiddleware())
 
 	// cart
-	e.POST("/cart/:product_id", carthandler.CreateCart, middlewares.JWTMiddleware())
+	e.POST("/cart", carthandler.CreateCart, middlewares.JWTMiddleware())
 	e.GET("/cart", carthandler.SelectAllCart, middlewares.JWTMiddleware())
 	e.DELETE("/cart", carthandler.DeleteCarts)
 
