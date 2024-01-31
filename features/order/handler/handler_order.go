@@ -4,6 +4,7 @@ import (
 	"BE-REPO-20/app/middlewares"
 	"BE-REPO-20/features/order"
 	"BE-REPO-20/utils/responses"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -102,11 +103,20 @@ func (handler *OrderHandler) GetOrders2(c echo.Context) error {
 }
 
 func (handler *OrderHandler) WebhoocksNotification(c echo.Context) error {
+	json_map := make(map[string]interface{})
+	errJson := json.NewDecoder(c.Request().Body).Decode(&json_map)
+	if errJson != nil {
+		panic(errJson)
+	}
+	fmt.Println(json_map)
+
 	var webhoocksReq = WebhoocksRequest{}
 	errBind := c.Bind(&webhoocksReq)
 	if errBind != nil {
 		return c.JSON(http.StatusBadRequest, responses.WebResponse("error bind data. data not valid", nil))
 	}
+	// fmt.Println(c.Request().Body)
+	fmt.Println(webhoocksReq)
 
 	orderCore := WebhoocksRequestToCore(webhoocksReq)
 	err := handler.orderService.WebhoocksService(orderCore)

@@ -100,7 +100,6 @@ func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.Or
 	// repo.db.Transaction(
 	repo.db.Transaction(func(tx *gorm.DB) error {
 		// Create Data Order
-
 		orderGorm = OrderCoreToModel(input)
 		orderGorm.PaymentMethod = payment.PaymentMethod
 		orderGorm.Status = payment.Status
@@ -110,6 +109,11 @@ func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.Or
 		if errOrder := tx.Create(&orderGorm).Error; errOrder != nil {
 			return errOrder
 		}
+
+		// 	payment, errPay := repo.paymentMidtrans.Order(orderGorm)
+		// if errPay != nil {
+		// 	return nil, errPay
+		// }
 
 		// // Create Data ItemOrder
 		itemOrders = CartToItemOrderList(carts)
