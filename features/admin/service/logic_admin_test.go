@@ -45,25 +45,42 @@ func TestSelectAllUser(t *testing.T) {
 }
 
 func TestSearchUserByQuery(t *testing.T) {
-	repo := new(mocks.AdminData)
-	srv := NewAdmin(repo)
-	expectedUsers := []admin.AdminUserCore{
-		{ID: 1,
-			FullName:  "alta",
-			UserName:  "alta academy",
-			Email:     "alta@mail.com",
-			Domicile:  "Jakarta",
-			Password:  "password",
-			Role:      "user",
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now()}}
-	repo.On("SearchUserByQuery", "query").Return(expectedUsers, nil)
+	t.Run("With Results", func(t *testing.T) {
+		repo := new(mocks.AdminData)
+		srv := NewAdmin(repo)
+		expectedUsers := []admin.AdminUserCore{
+			{ID: 1,
+				FullName:  "alta",
+				UserName:  "alta academy",
+				Email:     "alta@mail.com",
+				Domicile:  "Jakarta",
+				Password:  "password",
+				Role:      "user",
+				CreatedAt: time.Now(),
+				UpdatedAt: time.Now(),
+			},
+		}
+		repo.On("SearchUserByQuery", "query").Return(expectedUsers, nil)
 
-	result, err := srv.SearchUserByQuery("query")
+		result, err := srv.SearchUserByQuery("query")
 
-	assert.NoError(t, err)
-	assert.Equal(t, expectedUsers, result)
-	repo.AssertExpectations(t)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedUsers, result)
+		repo.AssertExpectations(t)
+	})
+
+	t.Run("Without Results", func(t *testing.T) {
+		repo := new(mocks.AdminData)
+		srv := NewAdmin(repo)
+
+		repo.On("SearchUserByQuery", "nonexistent").Return([]admin.AdminUserCore{}, nil)
+
+		results, err := srv.SearchUserByQuery("nonexistent")
+
+		assert.NoError(t, err)
+		assert.Empty(t, results)
+		repo.AssertExpectations(t)
+	})
 }
 
 func TestSelectAllOrder(t *testing.T) {
@@ -99,61 +116,52 @@ func TestSelectAllOrder(t *testing.T) {
 }
 
 func TestSearchOrderByQuery(t *testing.T) {
-	repo := new(mocks.AdminData)
-	srv := NewAdmin(repo)
-	expectedOrders := []admin.AdminItemOrderCore{
-		{ID: 1,
-			OrderID:      1,
-			ProductName:  "Sepatu Nike",
-			ProductPrice: 1000000,
-			Quantity:     2,
-			SubTotal:     2000000,
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
-			Order: admin.AdminOrderCore{
-				ID:         1,
-				UserID:     1,
-				Address:    "Depok",
-				CreditCard: "1234567890123456",
-				Status:     "pending",
-				Invoice:    "INV-001",
-				Total:      200,
-				VirtualAcc: "VA-001",
-				CreatedAt:  time.Now(),
-				UpdatedAt:  time.Now()}}}
-	repo.On("SearchOrderByQuery", "query").Return(expectedOrders, nil)
+	t.Run("With Results", func(t *testing.T) {
+		repo := new(mocks.AdminData)
+		srv := NewAdmin(repo)
+		expectedOrders := []admin.AdminItemOrderCore{
+			{
+				ID:           1,
+				OrderID:      1,
+				ProductName:  "Sepatu Nike",
+				ProductPrice: 1000000,
+				Quantity:     2,
+				SubTotal:     2000000,
+				CreatedAt:    time.Now(),
+				UpdatedAt:    time.Now(),
+				Order: admin.AdminOrderCore{
+					ID:         1,
+					UserID:     1,
+					Address:    "Depok",
+					CreditCard: "1234567890123456",
+					Status:     "pending",
+					Invoice:    "INV-001",
+					Total:      200,
+					VirtualAcc: "VA-001",
+					CreatedAt:  time.Now(),
+					UpdatedAt:  time.Now(),
+				},
+			},
+		}
+		repo.On("SearchOrderByQuery", "query").Return(expectedOrders, nil)
 
-	result, err := srv.SearchOrderByQuery("query")
+		result, err := srv.SearchOrderByQuery("query")
 
-	assert.NoError(t, err)
-	assert.Equal(t, expectedOrders, result)
-	repo.AssertExpectations(t)
-}
+		assert.NoError(t, err)
+		assert.Equal(t, expectedOrders, result)
+		repo.AssertExpectations(t)
+	})
 
-func TestSearchUserByQuery_NoResults(t *testing.T) {
+	t.Run("Without Results", func(t *testing.T) {
+		repo := new(mocks.AdminData)
+		srv := NewAdmin(repo)
 
-	repo := new(mocks.AdminData)
-	srv := NewAdmin(repo)
+		repo.On("SearchOrderByQuery", "nonexistent").Return([]admin.AdminItemOrderCore{}, nil)
 
-	repo.On("SearchUserByQuery", "nonexistent").Return([]admin.AdminUserCore{}, nil)
+		results, err := srv.SearchOrderByQuery("nonexistent")
 
-	results, err := srv.SearchUserByQuery("nonexistent")
-
-	assert.NoError(t, err)
-	assert.Empty(t, results)
-	repo.AssertExpectations(t)
-}
-
-func TestSearchOrderByQuery_NoResults(t *testing.T) {
-
-	repo := new(mocks.AdminData)
-	srv := NewAdmin(repo)
-
-	repo.On("SearchOrderByQuery", "nonexistent").Return([]admin.AdminItemOrderCore{}, nil)
-
-	results, err := srv.SearchOrderByQuery("nonexistent")
-
-	assert.NoError(t, err)
-	assert.Empty(t, results)
-	repo.AssertExpectations(t)
+		assert.NoError(t, err)
+		assert.Empty(t, results)
+		repo.AssertExpectations(t)
+	})
 }
