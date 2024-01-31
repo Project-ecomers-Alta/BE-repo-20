@@ -1,7 +1,9 @@
 package service
 
 import (
+	"BE-REPO-20/features/order"
 	_order "BE-REPO-20/features/order"
+	"errors"
 	// _midtransService "BE-REPO-20/features/midtrans/service"
 )
 
@@ -35,4 +37,17 @@ func (service *orderService) GetOrders(userId uint) ([]_order.OrderCore, error) 
 		return nil, err
 	}
 	return results, nil
+}
+
+func (service *orderService) WebhoocksService(webhoocksReq order.OrderCore) error {
+	if webhoocksReq.Id == 0 {
+		return errors.New("invalid order id")
+	}
+
+	err := service.orderData.WebhoocksData(webhoocksReq)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -11,15 +11,16 @@ import (
 
 type Order struct {
 	gorm.Model
-	UserID     uint
-	Address    string
-	CreditCard uint
-	Status     string
-	Invoice    string
-	Total      uint
-	VirtualAcc uint
-	User       _userData.User
-	ItemOrders []ItemOrder
+	UserID          uint
+	Address         string
+	PaymentMethod   string
+	TransactionTime string
+	Status          string
+	Invoice         string
+	Total           uint
+	VirtualAcc      uint
+	User            _userData.User
+	ItemOrders      []ItemOrder
 }
 
 type ItemOrder struct {
@@ -29,7 +30,6 @@ type ItemOrder struct {
 	ProductPrice uint
 	Quantity     uint
 	SubTotal     uint
-	// Order        Order
 }
 
 func CartToItemOrder(u data.Cart) ItemOrder {
@@ -51,11 +51,12 @@ func CartToItemOrderList(cart []data.Cart) []ItemOrder {
 
 func OrderCoreToModel(o order.OrderCore) Order {
 	return Order{
-		UserID:     o.UserID,
-		Address:    o.Address,
-		CreditCard: o.CreditCard,
-		Status:     o.Status,
-		Invoice:    o.Invoice,
+		UserID:          o.UserID,
+		Address:         o.Address,
+		PaymentMethod:   o.PaymentMethod,
+		TransactionTime: o.TransactionTime,
+		Status:          o.Status,
+		Invoice:         o.Invoice,
 		// Total:      o.Total,
 		VirtualAcc: o.VirtualAcc,
 		// User:       _userData.User{},
@@ -65,14 +66,15 @@ func OrderCoreToModel(o order.OrderCore) Order {
 
 func ModelToCore(o Order) order.OrderCore {
 	return order.OrderCore{
-		Id:         o.ID,
-		UserID:     o.UserID,
-		Address:    o.Address,
-		CreditCard: o.CreditCard,
-		Status:     o.Status,
-		Invoice:    o.Invoice,
-		Total:      o.Total,
-		VirtualAcc: o.VirtualAcc,
+		Id:              o.ID,
+		UserID:          o.UserID,
+		Address:         o.Address,
+		PaymentMethod:   o.PaymentMethod,
+		TransactionTime: o.TransactionTime,
+		Status:          o.Status,
+		Invoice:         o.Invoice,
+		Total:           o.Total,
+		VirtualAcc:      o.VirtualAcc,
 		User: user.UserCore{
 			ID:          o.User.ID,
 			UserName:    o.User.UserName,
@@ -113,4 +115,10 @@ func TotalAmount(o []data.Cart) int {
 		amount += int(v.Quantity * int(v.Product.Price))
 	}
 	return amount
+}
+
+func WebhoocksCoreToModel(reqNotif order.OrderCore) Order {
+	return Order{
+		Status: reqNotif.Status,
+	}
 }

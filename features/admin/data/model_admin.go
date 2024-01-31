@@ -25,14 +25,16 @@ type User struct {
 // struct user gorm model
 type Order struct {
 	gorm.Model
-	UserID     uint   `gorm:"foreignKey" json:"user_id" form:"user_id"`
-	Address    string `json:"addres" form:"addres"`
-	CreditCard string `json:"credit_card" form:"credit_card"`
-	Status     string `json:"status" form:"status"`
-	Invoice    string `json:"invoice" form:"invoice"`
-	Total      uint   `json:"total" form:"total"`
-	VirtualAcc string `json:"virtual_acc" form:"virtual_acc"`
-	User       User   `gorm:"foreignKey:UserID"`
+	UserID  uint   `gorm:"foreignKey" json:"user_id" form:"user_id"`
+	Address string `json:"addres" form:"addres"`
+	// CreditCard string `json:"credit_card" form:"credit_card"`
+	PaymentMethod   string `json:"payment_method" form:"payment_method"`
+	TransactionTime string `json:"transaction_time" form:"transaction_time"`
+	Status          string `json:"status" form:"status"`
+	Invoice         string `json:"invoice" form:"invoice"`
+	Total           uint   `json:"total" form:"total"`
+	VirtualAcc      string `json:"virtual_acc" form:"virtual_acc"`
+	User            User   `gorm:"foreignKey:UserID"`
 }
 
 // struct project gorm model
