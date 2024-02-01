@@ -64,7 +64,7 @@ func (handler *ProductHandler) SelectProductById(c echo.Context) error {
 	}
 	product, err := handler.productService.SelectProductById(1, idParam)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error read data. "+err.Error(), nil))
+		return c.JSON(http.StatusNotFound, responses.WebResponse("error read data. "+err.Error(), nil))
 	}
 	productResponse := CoreToResponse(*product)
 

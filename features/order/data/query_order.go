@@ -64,7 +64,7 @@ func (repo *orderQuery) GetOrders(userId uint) ([]order.OrderCore, error) {
 
 	return orderCores, nil
 }
-
+	
 // PostOrder implements order.OrderDataInterface.
 func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.OrderCore, error) {
 	var orderGorm Order
