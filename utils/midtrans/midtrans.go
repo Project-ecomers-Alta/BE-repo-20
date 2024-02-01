@@ -4,7 +4,6 @@ import (
 	"BE-REPO-20/app/configs"
 	"BE-REPO-20/features/order"
 	"errors"
-	"fmt"
 	"strconv"
 
 	mid "github.com/midtrans/midtrans-go"
@@ -35,7 +34,6 @@ func New() MidtransInterface {
 func (midtrans *midtrans) Order(data order.OrderCore) (*order.OrderCore, error) {
 	req := new(coreapi.ChargeReq)
 	// uuid := uuid.New()
-	fmt.Println("order id :", strconv.Itoa(int(data.Id)))
 	req.TransactionDetails = mid.TransactionDetails{
 		OrderID: strconv.Itoa(int(data.Id)),
 		// OrderID:  uuid.String(),
@@ -75,27 +73,20 @@ func (midtrans *midtrans) Order(data order.OrderCore) (*order.OrderCore, error) 
 
 	// response
 	VaNumb, _ := (strconv.Atoi(res.VaNumbers[0].VANumber))
-	fmt.Println("va number: ", VaNumb)
 	data.VirtualAcc = uint(VaNumb)
 	data.PaymentMethod = res.VaNumbers[0].Bank
 	data.Status = res.TransactionStatus
 	data.TransactionTime = res.TransactionTime
-
-	// data.VaNumber, _ = strconv.Atoi(res.VaNumbers[0].VANumber)
-	// data.PaymentType = res.PaymentType
-	// data.Status = res.TransactionStatus
-	// data.Payment.StatusCode = res.StatusCode
-	// data.Payment.StatusMessage = res.StatusMessage
-	// data.Payment.TransactionId = res.TransactionID
-	// data.Payment.Currency = res.Currency
-	// data.Payment.TransactionTime = res.TransactionTime
-	// data.Payment.FraudStatus = res.FraudStatus
-	// data.Payment.ExpiredAt = res.ExpiryTime
 
 	return &data, nil
 }
 
 // CancelOrder implements MidtransInterface.
 func (midtrans *midtrans) CancelOrder(orderId string) error {
-	panic("unimplemented")
+	res, _ := midtrans.client.CancelTransaction(orderId)
+	if res.StatusCode != "200" && res.StatusCode != "412" {
+		return errors.New(res.StatusMessage)
+	}
+
+	return nil
 }

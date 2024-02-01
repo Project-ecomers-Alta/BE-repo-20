@@ -1,12 +1,10 @@
 package data
 
 import (
-	"BE-REPO-20/app/configs"
 	"BE-REPO-20/features/product"
 	_userData "BE-REPO-20/features/user/data"
 	"BE-REPO-20/utils/uploads"
 	"errors"
-	"fmt"
 	"mime/multipart"
 
 	"gorm.io/gorm"
@@ -44,7 +42,6 @@ func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.Product
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
-	fmt.Println(configs.MIDTRANS_SERVER_KEY)
 	produtCore := ModelToCoreList(productGorm)
 
 	return produtCore, nil

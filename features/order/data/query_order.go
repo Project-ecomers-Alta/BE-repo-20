@@ -5,7 +5,6 @@ import (
 	"BE-REPO-20/features/order"
 	"BE-REPO-20/utils/midtrans"
 	"errors"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -86,7 +85,6 @@ func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.Or
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
-	fmt.Println("last order id +1: ", lastOrder.ID+1)
 
 	input.Total = uint(amount)
 	input.UserID = userId
@@ -133,7 +131,6 @@ func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.Or
 		return nil
 	})
 	// get order id
-	fmt.Println("order id:", orderGorm.ID)
 	orders, _ := repo.GetOrder(orderGorm.ID)
 	order = *orders
 
@@ -144,6 +141,26 @@ func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.Or
 func (repo *orderQuery) WebhoocksData(webhoocksReq order.OrderCore) error {
 	dataGorm := WebhoocksCoreToModel(webhoocksReq)
 	tx := repo.db.Model(&Order{}).Where("id = ?", webhoocksReq.Id).Updates(dataGorm)
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return errors.New("error record not found ")
+	}
+	return nil
+}
+
+// SelectOrderAdmin implements order.OrderDataInterface.
+func (repo *orderQuery) CancelOrder(userId int, orderId string, orderCore order.OrderCore) error {
+	if orderCore.Status == "cancelled" {
+		repo.paymentMidtrans.CancelOrder(orderId)
+	}
+
+	dataGorm := Order{
+		Status: orderCore.Status,
+	}
+	tx := repo.db.Model(&Order{}).Where("id = ? AND user_id = ?", orderId, userId).Updates(dataGorm)
 	if tx.Error != nil {
 		return tx.Error
 	}
