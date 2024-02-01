@@ -5,8 +5,6 @@ import (
 	_dataAuth "BE-REPO-20/features/auth/data"
 	_handlerAuth "BE-REPO-20/features/auth/handler"
 	_serviceAuth "BE-REPO-20/features/auth/service"
-	"BE-REPO-20/features/midtrans/controller"
-	"BE-REPO-20/features/midtrans/service"
 
 	_dataAdmin "BE-REPO-20/features/admin/data"
 	_handlerAdmin "BE-REPO-20/features/admin/handler"
@@ -29,9 +27,9 @@ import (
 	_serviceOrder "BE-REPO-20/features/order/service"
 
 	"BE-REPO-20/utils/encrypts"
+	"BE-REPO-20/utils/midtrans"
 	"BE-REPO-20/utils/uploads"
 
-	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -39,6 +37,7 @@ import (
 func InitRouter(db *gorm.DB, e *echo.Echo) {
 	hashService := encrypts.NewHashService()
 	uploadService := uploads.NewCloudService()
+	midtrans := midtrans.New()
 
 	authData := _dataAuth.NewAuth(db)
 	authService := _serviceAuth.NewAuth(authData, hashService)
@@ -60,16 +59,9 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	cartService := _serviceCart.NewCart(cartData)
 	carthandler := _handlerCart.NewCart(cartService)
 
-	orderData := _dataOrder.NewOrder(db)
+	orderData := _dataOrder.NewOrder(db, midtrans)
 	orderService := _serviceOrder.NewOrder(orderData)
 	orderHandler := _handlerOrder.NewOrder(orderService)
-
-	validate := validator.New()
-	midtransService := service.NewMidtransServiceImpl(validate)
-	midTransHandler := controller.NewMidtransControllerHandler(midtransService)
-
-	//midtrans
-	e.POST("/midtrans/create", midTransHandler.CreateEcho)
 
 	// login
 	e.POST("/login", authHandler.Login)
@@ -108,4 +100,6 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	// order
 	e.POST("/order", orderHandler.CreateOrder, middlewares.JWTMiddleware())
 	e.GET("/order", orderHandler.GetOrders, middlewares.JWTMiddleware())
+	e.PUT("/orders/:order_id", orderHandler.CancelOrderById, middlewares.JWTMiddleware())
+	e.POST("/payment/notification", orderHandler.WebhoocksNotification)
 }

@@ -16,16 +16,16 @@ type AdminUserResponse struct {
 }
 
 type AdminOrderResponse struct {
-	ID         uint   `json:"id"`
-	UserID     uint   `json:"user_id"`
-	Address    string `json:"address"`
-	CreditCard string `json:"credit_card"`
-	Status     string `json:"status"`
-	Invoice    string `json:"invoice"`
-	Total      uint   `json:"total"`
-	VirtualAcc string `json:"virtual_acc"`
-	CreatedAt  string `json:"created_at"`
-	UpdatedAt  string `json:"updated_at"`
+	ID            uint   `json:"id"`
+	UserID        uint   `json:"user_id"`
+	Address       string `json:"address"`
+	PaymentMethod string `json:"payment_method"`
+	Status        string `json:"status"`
+	Invoice       string `json:"invoice"`
+	Total         uint   `json:"total"`
+	VirtualAcc    string `json:"virtual_acc"`
+	CreatedAt     string `json:"created_at"`
+	UpdatedAt     string `json:"updated_at"`
 }
 
 type AdminItemOrderResponse struct {
@@ -63,16 +63,16 @@ func CoreToResponseList(data []admin.AdminUserCore) []AdminUserResponse {
 
 func CoreToOrderResponse(data admin.AdminOrderCore) AdminOrderResponse {
 	return AdminOrderResponse{
-		ID:         data.ID,
-		UserID:     data.UserID,
-		Address:    data.Address,
-		CreditCard: data.CreditCard,
-		Status:     data.Status,
-		Invoice:    data.Invoice,
-		Total:      data.Total,
-		VirtualAcc: data.VirtualAcc,
-		CreatedAt:  data.CreatedAt.Format("2006-01-02"),
-		UpdatedAt:  data.UpdatedAt.Format("2006-01-02"),
+		ID:            data.ID,
+		UserID:        data.UserID,
+		Address:       data.Address,
+		PaymentMethod: data.PaymentMethod,
+		Status:        data.Status,
+		Invoice:       data.Invoice,
+		Total:         data.Total,
+		VirtualAcc:    data.VirtualAcc,
+		CreatedAt:     data.CreatedAt.Format("2006-01-02"),
+		UpdatedAt:     data.UpdatedAt.Format("2006-01-02"),
 	}
 }
 

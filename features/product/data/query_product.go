@@ -42,7 +42,6 @@ func (repo *productQuery) SelectAllProduct(offset, limit int) ([]product.Product
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
-
 	produtCore := ModelToCoreList(productGorm)
 
 	return produtCore, nil

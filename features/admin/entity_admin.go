@@ -15,16 +15,16 @@ type AdminUserCore struct {
 }
 
 type AdminOrderCore struct {
-	ID         uint `gorm:"primaryKey"`
-	UserID     uint `gorm:"column:user_id"`
-	Address    string
-	CreditCard string
-	Status     string
-	Invoice    string
-	Total      uint
-	VirtualAcc string
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
+	ID            uint `gorm:"primaryKey"`
+	UserID        uint `gorm:"column:user_id"`
+	Address       string
+	PaymentMethod string
+	Status        string
+	Invoice       string
+	Total         uint
+	VirtualAcc    string
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
 }
 
 type AdminItemOrderCore struct {

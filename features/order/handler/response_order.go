@@ -1,22 +1,22 @@
 package handler
 
 import (
-	"BE-REPO-20/features/midtrans/web"
 	"BE-REPO-20/features/order"
 	"BE-REPO-20/features/user"
 )
 
 type OrderResponse struct {
-	Id         uint                `json:"id"`
-	UserID     uint                `json:"user_id"`
-	Address    string              `json:"address"`
-	CreditCard uint                `json:"credit_card"`
-	Status     string              `json:"status"`
-	Invoice    string              `json:"invoice"`
-	Total      uint                `json:"total"`
-	VirtualAcc uint                `json:"virtual_acc"`
-	User       user.UserCore       `json:"user"`
-	ItemOrders []ItemOrderResponse `json:"item_order"`
+	Id              uint                `json:"id"`
+	UserID          uint                `json:"user_id"`
+	Address         string              `json:"address"`
+	PaymentMethod   string              `json:"payment_method"`
+	TransactionTime string              `json:"transaction_time" form:"transaction_time"`
+	Status          string              `json:"status"`
+	Invoice         string              `json:"invoice"`
+	Total           uint                `json:"total"`
+	VirtualAcc      uint                `json:"virtual_acc"`
+	User            user.UserCore       `json:"user"`
+	ItemOrders      []ItemOrderResponse `json:"item_order"`
 }
 
 type ItemOrderResponse struct {
@@ -30,14 +30,15 @@ type ItemOrderResponse struct {
 
 func CoreToResponse(o order.OrderCore) OrderResponse {
 	return OrderResponse{
-		Id:         o.Id,
-		UserID:     o.UserID,
-		Address:    o.Address,
-		CreditCard: o.CreditCard,
-		Status:     o.Status,
-		Invoice:    o.Invoice,
-		Total:      o.Total,
-		VirtualAcc: o.VirtualAcc,
+		Id:              o.Id,
+		UserID:          o.UserID,
+		Address:         o.Address,
+		PaymentMethod:   o.PaymentMethod,
+		TransactionTime: o.TransactionTime,
+		Status:          o.Status,
+		Invoice:         o.Invoice,
+		Total:           o.Total,
+		VirtualAcc:      o.VirtualAcc,
 		User: user.UserCore{
 			ID:          o.User.ID,
 			UserName:    o.User.UserName,
@@ -70,23 +71,6 @@ func ItemOrderResponseToList(o []order.ItemOrderCore) []ItemOrderResponse {
 		})
 	}
 	return results
-}
-
-func OrderToMidtrans(o OrderResponse) web.MidtransRequest {
-	return web.MidtransRequest{
-		UserId:      int(o.User.ID),
-		Amount:      int64(TotalAmount(o)),
-		OrderID:     o.Id,
-		ItemName:    "Kaos",
-		FName:       o.User.UserName,
-		LName:       o.User.ShopName,
-		Phone:       o.User.PhoneNumber,
-		Address:     o.Address,
-		City:        o.User.City,
-		Postcode:    "13660",
-		CountryCode: "IDN",
-		Email:       o.User.Email,
-	}
 }
 
 func TotalAmount(o OrderResponse) int {
