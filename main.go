@@ -17,7 +17,7 @@ func main() {
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
-	// e.Use(middleware.Logger())
+	e.Use(middleware.Logger())
 
 	routes.InitRouter(dbsql, e)
 
