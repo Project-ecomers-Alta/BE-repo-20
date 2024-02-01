@@ -21,8 +21,8 @@ https://app.swaggerhub.com/apis/DWIMIRANDAA/E-CommerceApp/1.0.0#/
 <img width="700" alt="product" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/69c5c03b-8376-4d11-8f78-449e9b4bd53f">
 
 ### Cart, Order
-<img width="700" alt="cart" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/67d7c967-1e9a-4745-ba1f-2c0feaa8cad4">
-<img width="700" alt="order" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/d4d12bd1-3a1e-4344-8b51-639363fe368a">
+<img width="700" alt="cart" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/ab0d4a6a-110e-4b36-be18-e0eab1bd9350">
+<img width="700" alt="order" src="https://github.com/anggeldwi/group-project-unit2-be20/assets/124619425/040ec724-5715-45e6-b689-a1474dfd0047">
 
 
 
