@@ -31,11 +31,13 @@ type OrderDataInterface interface {
 	PostOrder(userId uint, input OrderCore) (*OrderCore, error)
 	GetOrder(userId uint) (*OrderCore, error)
 	GetOrders(userId uint) ([]OrderCore, error)
+	CancelOrder(userId int, orderId string, orderCore OrderCore) error
 	WebhoocksData(webhoocksReq OrderCore) error
 }
 
 type OrderServiceInterface interface {
 	PostOrder(userId uint, input OrderCore) (*OrderCore, error)
 	GetOrders(userId uint) ([]OrderCore, error)
+	CancelOrder(userId int, orderId string, orderCore OrderCore) error
 	WebhoocksService(webhoocksReq OrderCore) error
 }

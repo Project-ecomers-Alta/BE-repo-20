@@ -41,7 +41,6 @@ func (c *cloud) Upload(file multipart.File, nameFile string, folderName string) 
 		return nil, errUpl
 	}
 
-	fmt.Println()
 	return url, nil
 }
 

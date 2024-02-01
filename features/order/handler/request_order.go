@@ -19,6 +19,11 @@ type OrderRequest struct {
 type WebhoocksRequest struct {
 	OrderID           string `json:"order_id"`
 	TransactionStatus string `json:"transaction_status"`
+	SignatureKey      string `json:"signature_key"`
+}
+
+type CancelOrderRequest struct {
+	Status string `json:"status"`
 }
 
 func OrderRequestToCore(input OrderRequest) order.OrderCore {
@@ -56,5 +61,11 @@ func WebhoocksRequestToCore(input WebhoocksRequest) order.OrderCore {
 	return order.OrderCore{
 		Id:     uint(orderId),
 		Status: input.TransactionStatus,
+	}
+}
+
+func CancelRequestToCoreOrder(input CancelOrderRequest) order.OrderCore {
+	return order.OrderCore{
+		Status: input.Status,
 	}
 }
