@@ -59,7 +59,7 @@ func (handler *OrderHandler) CreateOrder(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.WebResponse("Success get order.", results))
 }
 
-func (handler *OrderHandler) CancleOrderById(c echo.Context) error {
+func (handler *OrderHandler) CancelOrderById(c echo.Context) error {
 	userIdLogin := middlewares.ExtractTokenUserId(c)
 	if userIdLogin == 0 {
 		return c.JSON(http.StatusUnauthorized, responses.WebResponse("Unauthorized user", nil))
@@ -74,12 +74,12 @@ func (handler *OrderHandler) CancleOrderById(c echo.Context) error {
 	}
 
 	orderCore := CancelRequestToCoreOrder(updateOrderStatus)
-	errCancle := handler.orderService.CancelOrder(userIdLogin, orderId, orderCore)
-	if errCancle != nil {
-		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error cancle order", nil))
+	errCancel := handler.orderService.CancelOrder(userIdLogin, orderId, orderCore)
+	if errCancel != nil {
+		return c.JSON(http.StatusInternalServerError, responses.WebResponse("error cancel order", nil))
 	}
 
-	return c.JSON(http.StatusOK, responses.WebResponse("success cancle order", nil))
+	return c.JSON(http.StatusOK, responses.WebResponse("success cancel order", nil))
 }
 
 func (handler *OrderHandler) WebhoocksNotification(c echo.Context) error {

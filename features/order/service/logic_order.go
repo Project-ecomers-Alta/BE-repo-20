@@ -52,7 +52,7 @@ func (service *orderService) GetOrders(userId uint) ([]_order.OrderCore, error) 
 	return results, nil
 }
 
-// CancleOrder implements order.OrderServiceInterface.
+// CancelOrder implements order.OrderServiceInterface.
 func (os *orderService) CancelOrder(userIdLogin int, orderId string, orderCore order.OrderCore) error {
 	if orderCore.Status == "" {
 		orderCore.Status = "cancelled"
