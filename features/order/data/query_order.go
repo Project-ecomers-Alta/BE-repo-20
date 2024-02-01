@@ -5,6 +5,7 @@ import (
 	"BE-REPO-20/features/order"
 	"BE-REPO-20/utils/midtrans"
 	"errors"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -81,14 +82,20 @@ func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.Or
 		amount += carts[i].Quantity * int(carts[i].Product.Price)
 	}
 
-	tx := repo.db.Last(&lastOrder)
-	if tx.Error != nil {
-		return nil, tx.Error
+	result := repo.db.First(&lastOrder)
+	if result.RowsAffected == 0 {
+		lastOrder.ID = 0
+	} else {
+		tx := repo.db.Last(&lastOrder)
+		if tx.Error != nil {
+			return nil, tx.Error
+		}
 	}
 
 	input.Total = uint(amount)
 	input.UserID = userId
 	input.Id = lastOrder.ID + 1
+	fmt.Println(input.Id)
 
 	payment, errPay := repo.paymentMidtrans.Order(input)
 	if errPay != nil {
