@@ -97,16 +97,16 @@ func TestSelectAllOrder(t *testing.T) {
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 		Order: admin.AdminOrderCore{
-			ID:         1,
-			UserID:     1,
-			Address:    "Depok",
-			CreditCard: "1234567890123456",
-			Status:     "pending",
-			Invoice:    "INV-001",
-			Total:      2000000,
-			VirtualAcc: "VA-001",
-			CreatedAt:  time.Now(),
-			UpdatedAt:  time.Now()}}}
+			ID:            1,
+			UserID:        1,
+			Address:       "Depok",
+			PaymentMethod: "bank_transfer",
+			Status:        "pending",
+			Invoice:       "INV-001",
+			Total:         2000000,
+			VirtualAcc:    "VA-001",
+			CreatedAt:     time.Now(),
+			UpdatedAt:     time.Now()}}}
 	repo.On("SelectAllOrder", mock.Anything).Return(expectedOrders, nil).Once()
 
 	result, err := srv.SelectAllOrder()
@@ -131,16 +131,16 @@ func TestSearchOrderByQuery(t *testing.T) {
 				CreatedAt:    time.Now(),
 				UpdatedAt:    time.Now(),
 				Order: admin.AdminOrderCore{
-					ID:         1,
-					UserID:     1,
-					Address:    "Depok",
-					CreditCard: "1234567890123456",
-					Status:     "pending",
-					Invoice:    "INV-001",
-					Total:      200,
-					VirtualAcc: "VA-001",
-					CreatedAt:  time.Now(),
-					UpdatedAt:  time.Now(),
+					ID:            1,
+					UserID:        1,
+					Address:       "Depok",
+					PaymentMethod: "bank_transfer",
+					Status:        "pending",
+					Invoice:       "INV-001",
+					Total:         200,
+					VirtualAcc:    "VA-001",
+					CreatedAt:     time.Now(),
+					UpdatedAt:     time.Now(),
 				},
 			},
 		}
