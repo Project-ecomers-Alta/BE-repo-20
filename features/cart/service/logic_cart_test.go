@@ -13,7 +13,11 @@ func TestSelectAllCart(t *testing.T) {
 	repo := new(mocks.CartData)
 	service := NewCart(repo)
 
-	expectedCarts := []auth.CartCore{{ID: 1, UserID: 1, ProductID: 1, Quantity: 2}}
+	expectedCarts := []auth.CartCore{
+		{ID: 1,
+			UserID:    1,
+			ProductID: 1,
+			Quantity:  2}}
 
 	repo.On("SelectAllCart", mock.Anything).Return(expectedCarts, nil).Once()
 
@@ -43,7 +47,10 @@ func TestCreateCart(t *testing.T) {
 	repo := new(mocks.CartData)
 	srv := NewCart(repo)
 
-	input := auth.CartCore{UserID: 1, ProductID: 1, Quantity: 2}
+	input := auth.CartCore{
+		UserID:    1,
+		ProductID: 1,
+		Quantity:  2}
 
 	repo.On("CreateCart", mock.Anything).Return(nil).Once()
 
