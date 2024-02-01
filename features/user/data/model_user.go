@@ -10,7 +10,7 @@ type User struct {
 	gorm.Model
 	UserName    string `gorm:"default:null" db:"user_name"`
 	ShopName    string `gorm:"default:null"`
-	Email       string `gorm:"default:null"`
+	Email       string `gorm:"default:null;unique"`
 	PhoneNumber string `gorm:"default:null"`
 	Domicile    string `gorm:"default:null"`
 	Password    string `gorm:"default:null"`
