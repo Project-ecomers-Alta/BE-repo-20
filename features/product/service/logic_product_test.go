@@ -52,40 +52,62 @@ func TestSelectAllProduct(t *testing.T) {
 }
 
 func TestCreateProduct(t *testing.T) {
-	repo := new(mocks.ProductData)
-	srv := NewProduct(repo)
+	t.Run("Valid Product", func(t *testing.T) {
+		repo := new(mocks.ProductData)
+		srv := NewProduct(repo)
 
-	validInput := product.ProductCore{Name: "Product 1", Price: 1000, Quantity: 10, Category: "Category 1"}
-	invalidInput := product.ProductCore{}
+		validInput := product.ProductCore{Name: "Product 1", Price: 1000, Quantity: 10, Category: "Category 1"}
 
-	repo.On("CreateProduct", 1, mock.Anything).Return(nil).Once()
+		repo.On("CreateProduct", 1, validInput).Return(nil).Once()
 
-	err := srv.CreateProduct(1, validInput)
-	assert.NoError(t, err)
-	repo.AssertExpectations(t)
+		err := srv.CreateProduct(1, validInput)
+		assert.NoError(t, err)
+		repo.AssertExpectations(t)
+	})
 
-	invalidInput.Name = "" // Missing name
-	err = srv.CreateProduct(1, invalidInput)
-	expectedErr := errors.New("field name must be filled")
-	assert.EqualError(t, err, expectedErr.Error())
+	t.Run("Empty Product Name", func(t *testing.T) {
+		repo := new(mocks.ProductData)
+		srv := NewProduct(repo)
 
-	invalidInput.Name = "Product 1" // Reset name, now missing price
-	invalidInput.Price = 0
-	err = srv.CreateProduct(1, invalidInput)
-	expectedErr = errors.New("field price must be filled")
-	assert.EqualError(t, err, expectedErr.Error())
+		invalidInput := product.ProductCore{Name: ""}
 
-	invalidInput.Price = 1000 // Reset price, now missing quantity
-	invalidInput.Quantity = 0
-	err = srv.CreateProduct(1, invalidInput)
-	expectedErr = errors.New("field quantity must be filled")
-	assert.EqualError(t, err, expectedErr.Error())
+		err := srv.CreateProduct(1, invalidInput)
+		expectedErr := errors.New("field name must be filled")
+		assert.EqualError(t, err, expectedErr.Error())
+	})
 
-	invalidInput.Quantity = 10 // Reset quantity, now missing category
-	invalidInput.Category = ""
-	err = srv.CreateProduct(1, invalidInput)
-	expectedErr = errors.New("field category must be filled")
-	assert.EqualError(t, err, expectedErr.Error())
+	t.Run("Empty Product Price", func(t *testing.T) {
+		repo := new(mocks.ProductData)
+		srv := NewProduct(repo)
+
+		invalidInput := product.ProductCore{Name: "Product 1", Price: 0}
+
+		err := srv.CreateProduct(1, invalidInput)
+		expectedErr := errors.New("field price must be filled")
+		assert.EqualError(t, err, expectedErr.Error())
+	})
+
+	t.Run("Empty Product Quantity", func(t *testing.T) {
+		repo := new(mocks.ProductData)
+		srv := NewProduct(repo)
+
+		invalidInput := product.ProductCore{Name: "Product 1", Price: 1000, Quantity: 0}
+
+		err := srv.CreateProduct(1, invalidInput)
+		expectedErr := errors.New("field quantity must be filled")
+		assert.EqualError(t, err, expectedErr.Error())
+	})
+
+	t.Run("Empty Product Category", func(t *testing.T) {
+		repo := new(mocks.ProductData)
+		srv := NewProduct(repo)
+
+		invalidInput := product.ProductCore{Name: "Product 1", Price: 1000, Quantity: 10, Category: ""}
+
+		err := srv.CreateProduct(1, invalidInput)
+		expectedErr := errors.New("field category must be filled")
+		assert.EqualError(t, err, expectedErr.Error())
+	})
 }
 
 func TestSelectProductById(t *testing.T) {
@@ -158,18 +180,25 @@ func TestCreateProductImage(t *testing.T) {
 }
 
 func TestDeleteProductImageById(t *testing.T) {
-	repo := new(mocks.ProductData)
-	srv := NewProduct(repo)
+	t.Run("Valid Image ID", func(t *testing.T) {
+		repo := new(mocks.ProductData)
+		srv := NewProduct(repo)
 
-	validIdImage := 1
-	repo.On("DeleteProductImageById", 1, 1, mock.Anything).Return(nil).Once()
-	err := srv.DeleteProductImageById(1, 1, validIdImage)
+		validIdImage := 1
+		repo.On("DeleteProductImageById", 1, 1, validIdImage).Return(nil).Once()
+		err := srv.DeleteProductImageById(1, 1, validIdImage)
 
-	assert.NoError(t, err)
-	repo.AssertExpectations(t)
+		assert.NoError(t, err)
+		repo.AssertExpectations(t)
+	})
 
-	invalidIdImage := 0
-	err = srv.DeleteProductImageById(1, 1, invalidIdImage)
-	expectedErr := errors.New("invalid id")
-	assert.EqualError(t, err, expectedErr.Error())
+	t.Run("Invalid Image ID", func(t *testing.T) {
+		repo := new(mocks.ProductData)
+		srv := NewProduct(repo)
+
+		invalidIdImage := 0
+		err := srv.DeleteProductImageById(1, 1, invalidIdImage)
+		expectedErr := errors.New("invalid id")
+		assert.EqualError(t, err, expectedErr.Error())
+	})
 }
