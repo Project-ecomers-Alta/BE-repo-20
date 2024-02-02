@@ -64,7 +64,7 @@ func (repo *orderQuery) GetOrders(userId uint) ([]order.OrderCore, error) {
 
 	return orderCores, nil
 }
-	
+
 // PostOrder implements order.OrderDataInterface.
 func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.OrderCore, error) {
 	var orderGorm Order
@@ -82,7 +82,7 @@ func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.Or
 		amount += carts[i].Quantity * int(carts[i].Product.Price)
 	}
 
-	result := repo.db.First(&lastOrder)
+	result := repo.db.Last(&lastOrder)
 	if result.RowsAffected == 0 {
 		lastOrder.ID = 0
 	} else {
@@ -91,7 +91,7 @@ func (repo *orderQuery) PostOrder(userId uint, input order.OrderCore) (*order.Or
 			return nil, tx.Error
 		}
 	}
-
+	fmt.Println(lastOrder.ID)
 	input.Total = uint(amount)
 	input.UserID = userId
 	input.Id = lastOrder.ID + 1
