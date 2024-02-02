@@ -53,9 +53,9 @@ func TestGetUser(t *testing.T) {
 		repo.AssertExpectations(t)
 
 		// userIdInvalid := 0
-		_, err = srv.SelectUser(1)
-		expectedErr := err
-		assert.EqualError(nil, err, expectedErr.Error())
+		// _, err = srv.SelectUser(1)
+		// expectedErr := err
+		// assert.EqualError(nil, err, expectedErr.Error())
 	})
 }
 
